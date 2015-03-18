@@ -162,7 +162,7 @@ class Transaction(object):
     def send_offer(self, discovery):
         offer = WriteBootProtocolPacket()
         offer.parameter_order = discovery.parameter_request_list
-        mac = discovery.client_identifier or discovery.client_mac_address
+        mac = discovery.client_mac_address
         ip = offer.your_ip_address = self.server.get_ip_address(mac)
         offer.client_ip_address = ip
         offer.transaction_id = discovery.transaction_id
@@ -189,7 +189,7 @@ class Transaction(object):
         ack.parameter_order = request.parameter_request_list
         ack.transaction_id = request.transaction_id
         ack.next_server_ip_address = self.configuration.server_identifier
-        mac = request.client_identifier or request.client_mac_address
+        mac = request.client_mac_address
         ack.client_mac_address = mac
         requested_ip_address = request.requested_ip_address
         ack.client_ip_address = requested_ip_address
