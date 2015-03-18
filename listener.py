@@ -208,6 +208,8 @@ class ReadBootProtocolPacket(object):
         return """Message Type: {self.message_type}
 client MAC address: {self.client_mac_address}
 client IP address: {self.client_ip_address}
+your IP address: {self.your_ip_address}
+next server IP address: {self.next_server_ip_address}
 {self.formatted_named_options}
 """.format(self = self)
 

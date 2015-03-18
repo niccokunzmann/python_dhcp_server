@@ -160,14 +160,18 @@ class Transaction(object):
         self.send_offer(discovery)
 
     def send_offer(self, discovery):
+        # https://tools.ietf.org/html/rfc2131
         offer = WriteBootProtocolPacket()
         offer.parameter_order = discovery.parameter_request_list
         mac = discovery.client_mac_address
-        ip = offer.your_ip_address = self.server.get_ip_address(mac)
-        offer.client_ip_address = ip
+        ip = offer.your_ip_address = self.server.get_ip_address(mac, discovery.requested_ip_address)
+        # offer.client_ip_address = 
         offer.transaction_id = discovery.transaction_id
-        offer.next_server_ip_address = self.configuration.server_identifier
+        # offer.next_server_ip_address =
+        offer.relay_agent_ip_address = discovery.relay_agent_ip_address
         offer.client_mac_address = mac
+        offer.client_ip_address = discovery.client_ip_address or '0.0.0.0'
+        offer.bootp_flags = discovery.bootp_flags
         offer.dhcp_message_type = 'DHCPOFFER'
         offer.client_identifier = mac
         offer.subnet_mask = self.configuration.subnet_mask
@@ -175,30 +179,36 @@ class Transaction(object):
         offer.ip_address_lease_time = self.configuration.ip_address_lease_time
         offer.server_identifier = self.configuration.server_identifier
         offer.domain_name_server = self.configuration.domain_name_server
+        offer.broadcast_address = self.configuration.broadcast_address
         self.server.broadcast(offer)
     
     def received_dhcp_request(self, request):
         if self.is_done(): return 
         self.server.client_has_chosen(request)
         self.close()
-        if request.server_identifier in self.server.server_identifiers:
+        if request.server_identifier in self.server.server_identifiers or \
+           not server.is_valid_client_address(request.requested_ip_address):
             self.acknowledge(request)
 
     def acknowledge(self, request):
         ack = WriteBootProtocolPacket()
         ack.parameter_order = request.parameter_request_list
         ack.transaction_id = request.transaction_id
-        ack.next_server_ip_address = self.configuration.server_identifier
+        # ack.next_server_ip_address =
+        ack.bootp_flags = request.bootp_flags
+        ack.relay_agent_ip_address = request.relay_agent_ip_address
         mac = request.client_mac_address
         ack.client_mac_address = mac
         requested_ip_address = request.requested_ip_address
-        ack.client_ip_address = requested_ip_address
+        ack.client_ip_address = request.client_ip_address or '0.0.0.0'
+        ack.your_ip_address = self.server.get_ip_address(mac, requested_ip_address) # todo: should be asked from the server who knows it
         ack.subnet_mask = self.configuration.subnet_mask
         ack.router = self.configuration.router
         ack.dhcp_message_type = 'DHCPACK'
         ack.ip_address_lease_time = self.configuration.ip_address_lease_time
         ack.server_identifier = self.configuration.server_identifier
         ack.domain_name_server = self.configuration.domain_name_server
+        ack.broadcast_address = self.configuration.broadcast_address
         self.server.broadcast(ack)
 
     def received_dhcp_inform(self, inform):
@@ -207,15 +217,17 @@ class Transaction(object):
 
 class DHCPServerConfiguration(object):
     
-    dhcp_offer_after_seconds = 1
+    dhcp_offer_after_seconds = 10
     dhcp_acknowledge_after_seconds = 0
     length_of_transaction = 20
 
     server_identifier = '0.0.0.0'
-    network = '192.168.0.0'
+    network = '192.168.173.0'
+    broadcast_address = '255.255.255.255'
     subnet_mask = '255.255.255.0'
     router = None
-    ip_address_lease_time = 86400 # seconds
+    # 1 day is 86400
+    ip_address_lease_time = 300 # seconds
     domain_name_server = None
     
 
@@ -258,7 +270,15 @@ class DHCPServer(object):
     def client_has_chosen(self, packet):
         print('client_has_chosen:\n {}'.format(str(packet).replace('\n', '\n\t')))
 
-    def get_ip_address(self, mac_address):
+    def is_valid_client_address(self, address):
+        a = address.split('.')
+        s = self.configuration.subnet_mask.split('.')
+        n = self.configuration.network.split('.')
+        return all(s[i] == '0' or a[i] == n[i] for i in range(4))
+
+    def get_ip_address(self, mac_address, requested_ip_address):
+        if self.is_valid_client_address(requested_ip_address):
+            return requested_ip_address
         self.ip_number = (self.ip_number + 1) % 200 + 5
         return self.configuration.network[:-1] + str(self.ip_number)
 
