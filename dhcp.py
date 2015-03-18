@@ -164,6 +164,7 @@ class Transaction(object):
         offer.parameter_order = discovery.parameter_request_list
         mac = discovery.client_identifier or discovery.client_mac_address
         ip = offer.your_ip_address = self.server.get_ip_address(mac)
+        offer.client_ip_address = ip
         offer.transaction_id = discovery.transaction_id
         offer.next_server_ip_address = self.configuration.server_identifier
         offer.client_mac_address = mac
@@ -180,7 +181,7 @@ class Transaction(object):
         if self.is_done(): return 
         self.server.client_has_chosen(request)
         self.close()
-        if request.server_identifier == self.configuration.server_identifier:
+        if request.server_identifier in self.server.server_identifiers:
             self.acknowledge(request)
 
     def acknowledge(self, request):
@@ -191,6 +192,7 @@ class Transaction(object):
         mac = request.client_identifier or request.client_mac_address
         ack.client_mac_address = mac
         requested_ip_address = request.requested_ip_address
+        ack.client_ip_address = requested_ip_address
         ack.subnet_mask = self.configuration.subnet_mask
         ack.router = self.configuration.router
         ack.dhcp_message_type = 'DHCPACK'
@@ -260,15 +262,22 @@ class DHCPServer(object):
         self.ip_number = (self.ip_number + 1) % 200 + 5
         return self.configuration.network[:-1] + str(self.ip_number)
 
+    @property
+    def server_identifiers(self):
+        return gethostbyname_ex(gethostname())[2]
+
     def broadcast(self, packet):
         print('broadcasting:\n {}'.format(str(packet).replace('\n', '\n\t')))
-        for addr in gethostbyname_ex(gethostname())[2]:
+        for addr in self.server_identifiers:
             broadcast_socket = socket(type = SOCK_DGRAM)
             broadcast_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
             broadcast_socket.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+            packet.server_identifier = addr
             broadcast_socket.bind((addr, 67))
             try:
-                broadcast_socket.sendto(packet.to_bytes(), ('255.255.255.255', 68))
+                data = packet.to_bytes()
+                broadcast_socket.sendto(data, ('255.255.255.255', 68))
+                broadcast_socket.sendto(data, (addr, 68))
             finally:
                 broadcast_socket.close()
 
