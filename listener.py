@@ -37,7 +37,6 @@ def macunpack(data):
     return ':'.join([s[i:i+2].decode('ascii') for i in range(0, 12, 2)])
 
 def macpack(mac):
-    print(repr(mac))
     return base64.b16decode(mac.replace(':', '').replace('-', ''))
 
 
@@ -102,7 +101,7 @@ options = [
     ('requested_ip_address', inet_ntoa, inet_aton),
     ('ip_address_lease_time', lambda d: struct.unpack('>I', d)[0], lambda i: struct.pack('>I', i)),
     ('option_overload', None, None),
-    ('dhcp_message_type', lambda data: dhcp_message_types.get(data[0], data[0]), lambda name: reversed_dhcp_message_types.get(name, name)),
+    ('dhcp_message_type', lambda data: dhcp_message_types.get(data[0], data[0]), (lambda name: bytes([reversed_dhcp_message_types.get(name, name)]))),
     ('server_identifier', inet_ntoa, inet_aton),
     ('parameter_request_list', list, bytes),
     ('message', None, None),

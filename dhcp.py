@@ -26,7 +26,7 @@ class WriteBootProtocolPacket(object):
     client_mac_address = None
     magic_cookie = '99.130.83.99'
 
-    parameter_request_list = []
+    parameter_order = []
     
     def __init__(self):
         pass
@@ -54,10 +54,13 @@ class WriteBootProtocolPacket(object):
         result += inet_aton(self.magic_cookie)
 
         for option in self.options:
-            value = get_option(option)
+            value = self.get_option(option)
+            #print(option, value)
+            if value is None:
+                continue
             result += bytes([option, len(value)]) + value
-
-        return result
+        result += bytes([255])
+        return bytes(result)
 
     def get_option(self, option):
         if option < len(options) and hasattr(self, options[option][0]):
@@ -67,7 +70,7 @@ class WriteBootProtocolPacket(object):
         else:
             return None
         function = options[option][2]
-        if function:
+        if function and value is not None:
             value = function(value)
         return value
     
@@ -75,8 +78,8 @@ class WriteBootProtocolPacket(object):
     def options(self):
         done = list()
         # fulfill wishes
-        for option in self.parameter_request_list:
-            if hasattr(self, options[option][0]) or hasattr(self, 'option_{}'.format(option)):
+        for option in self.parameter_order:
+            if option < len(options) and hasattr(self, options[option][0]) or hasattr(self, 'option_{}'.format(option)):
                 # this may break with the specification because we must try to fulfill the wishes
                 if option not in done:
                     done.append(option)
@@ -90,6 +93,9 @@ class WriteBootProtocolPacket(object):
                 if option not in done:
                     done.append(option)
         return done
+
+    def __str__(self):
+        return str(ReadBootProtocolPacket(self.to_bytes()))
 
 class DelayWorker(object):
 
@@ -117,7 +123,6 @@ class DelayWorker(object):
 
     def close(self):
         self.closed = True
-
 
 class Transaction(object):
 
@@ -151,10 +156,12 @@ class Transaction(object):
 
     def received_dhcp_discover(self, discovery):
         if self.is_done(): return
+        print('discover:\n {}'.format(str(discovery).replace('\n', '\n\t')))
         self.send_offer(discovery)
 
     def send_offer(self, discovery):
         offer = WriteBootProtocolPacket()
+        offer.parameter_order = discovery.parameter_request_list
         mac = discovery.client_identifier or discovery.client_mac_address
         ip = offer.your_ip_address = self.server.get_ip_address(mac)
         offer.transaction_id = discovery.transaction_id
@@ -178,16 +185,18 @@ class Transaction(object):
 
     def acknowledge(self, request):
         ack = WriteBootProtocolPacket()
+        ack.parameter_order = request.parameter_request_list
         ack.transaction_id = request.transaction_id
         ack.next_server_ip_address = self.configuration.server_identifier
-        mac = discovery.client_identifier or discovery.client_mac_address
+        mac = request.client_identifier or request.client_mac_address
         ack.client_mac_address = mac
         requested_ip_address = request.requested_ip_address
         ack.subnet_mask = self.configuration.subnet_mask
         ack.router = self.configuration.router
+        ack.dhcp_message_type = 'DHCPACK'
         ack.ip_address_lease_time = self.configuration.ip_address_lease_time
-        ack.server_identifier = self.configuation.server_identifier
-        offer.domain_name_server = self.configuration.domain_name_server
+        ack.server_identifier = self.configuration.server_identifier
+        ack.domain_name_server = self.configuration.domain_name_server
         self.server.broadcast(ack)
 
     def received_dhcp_inform(self, inform):
@@ -203,9 +212,9 @@ class DHCPServerConfiguration(object):
     server_identifier = '0.0.0.0'
     network = '192.168.0.0'
     subnet_mask = '255.255.255.0'
-    router = []
+    router = None
     ip_address_lease_time = 86400 # seconds
-    domain_name_server = []
+    domain_name_server = None
     
 
 
@@ -218,8 +227,6 @@ class DHCPServer(object):
         self.socket = socket(type = SOCK_DGRAM)
         self.socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         self.socket.bind(('', 67))
-        self.broadcast_socket = self.socket
-        self.broadcast_socket.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
         self.delay_worker = DelayWorker()
         self.ip_number = 5
         self.closed = False
@@ -228,7 +235,6 @@ class DHCPServer(object):
     def close(self):
         self.socket.close()
         self.closed = True
-        self.packet_queue.put(None)
         self.delay_worker.close()
         for transaction in list(self.transaction.values()):
             transaction.close()
@@ -255,7 +261,16 @@ class DHCPServer(object):
         return self.configuration.network[:-1] + str(self.ip_number)
 
     def broadcast(self, packet):
-        self.broadcast_socket.sendto(packet.to_bytes(), '255.255.255.255')
+        print('broadcasting:\n {}'.format(str(packet).replace('\n', '\n\t')))
+        for addr in gethostbyname_ex(gethostname())[2]:
+            broadcast_socket = socket(type = SOCK_DGRAM)
+            broadcast_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+            broadcast_socket.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+            broadcast_socket.bind((addr, 67))
+            try:
+                broadcast_socket.sendto(packet.to_bytes(), ('255.255.255.255', 68))
+            finally:
+                broadcast_socket.close()
 
     def run(self):
         while not self.closed:
