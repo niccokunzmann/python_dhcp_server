@@ -271,6 +271,8 @@ class DHCPServer(object):
         print('client_has_chosen:\n {}'.format(str(packet).replace('\n', '\n\t')))
 
     def is_valid_client_address(self, address):
+        if address is None:
+            return False
         a = address.split('.')
         s = self.configuration.subnet_mask.split('.')
         n = self.configuration.network.split('.')
