@@ -39,6 +39,11 @@ def macunpack(data):
 def macpack(mac):
     return base64.b16decode(mac.replace(':', '').replace('-', ''))
 
+def unpackbool(data):
+    return data[0]
+
+def packbool(bool):
+    return bytes([bool])
 
 options = [
 # RFC1497 vendor extensions
@@ -62,8 +67,8 @@ options = [
     ('root_path', None, None),
     ('extensions_path', None, None),
 # IP Layer Parameters per Host
-    ('ip_forwarding_enabled', None, None),
-    ('non_local_source_routing_enabled', None, None),
+    ('ip_forwarding_enabled', unpackbool, packbool),
+    ('non_local_source_routing_enabled', unpackbool, packbool),
     ('policy_filer', None, None),
     ('maximum_datagram_reassembly_size', shortunpack, shortpack),
     ('default_ip_time_to_live', lambda data: data[0], lambda i: bytes([i])),
@@ -71,9 +76,9 @@ options = [
     ('path_mtu_plateau_table', None, None),
 # IP Layer Parameters per Interface
     ('interface_mtu', None, None),
-    ('all_subnets_are_local', None, None),
+    ('all_subnets_are_local', unpackbool, packbool),
     ('broadcast_address', inet_ntoa, inet_aton),
-    ('perform_mask_discovery', None, None),
+    ('perform_mask_discovery', unpackbool, packbool),
     ('mask_supplier', None, None),
     ('perform_router_discovery', None, None),
     ('router_solicitation_address', inet_ntoa, inet_aton),
@@ -212,6 +217,9 @@ your IP address: {self.your_ip_address}
 next server IP address: {self.next_server_ip_address}
 {self.formatted_named_options}
 """.format(self = self)
+
+    def __gt__(self, other):
+        return id(self) < id(other)
 
 data = base64.b16decode('02010600f7b41ad100000000c0a800640000000000000000000000007c7a914bca6c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000638253633501053604c0a800010104ffffff000304c0a800010604c0a80001ff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'.upper())
 assert data[0] == 2

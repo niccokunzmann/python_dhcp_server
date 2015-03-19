@@ -6,6 +6,10 @@ import collections
 
 from listener import *
 
+def get_host_ip_addresses():
+    return gethostbyname_ex(gethostname())[2]
+
+
 class WriteBootProtocolPacket(object):
 
     message_type = 2 # 1 for client -> server 2 for server -> client
@@ -209,9 +213,9 @@ class Transaction(object):
 
 class DHCPServerConfiguration(object):
     
-    dhcp_offer_after_seconds = 5
-    dhcp_acknowledge_after_seconds = 5
-    length_of_transaction = 20
+    dhcp_offer_after_seconds = 10
+    dhcp_acknowledge_after_seconds = 10
+    length_of_transaction = 40
 
     network = '192.168.173.0'
     broadcast_address = '255.255.255.255'
@@ -224,7 +228,22 @@ class DHCPServerConfiguration(object):
     ip_file = 'ips.csv'
 
     debug = lambda *args, **kw: None
-    
+
+    def load(self, file):
+        with open(file) as f:
+            exec(f.read(), self.__dict__)
+
+    def adjust_if_this_computer_is_a_router(self):
+        ip_addresses = get_host_ip_addresses()
+        for ip in reversed(ip_addresses):
+            if ip.split('.')[-1] == '1':
+                self.router = [ip]
+                self.domain_name_server = [ip]
+                self.network = '.'.join(ip.split('.')[:-1] + ['0'])
+                self.broadcast_address = '.'.join(ip.split('.')[:-1] + ['255'])
+                #self.ip_forwarding_enabled = True
+                #self.non_local_source_routing_enabled = True
+                #self.perform_mask_discovery = True
 
 class IPDatabase(object):
 
@@ -265,8 +284,6 @@ class IPDatabase(object):
             for line in f:
                 lines.append(line.strip().split(self.delimiter))
         return lines
-        
-
 
 class DHCPServer(object):
 
@@ -286,7 +303,7 @@ class DHCPServer(object):
         self.socket.close()
         self.closed = True
         self.delay_worker.close()
-        for transaction in list(self.transaction.values()):
+        for transaction in list(self.transactions.values()):
             transaction.close()
 
     def update(self, timeout = 0):
@@ -305,10 +322,13 @@ class DHCPServer(object):
 
     def client_has_chosen(self, packet):
         self.configuration.debug('client_has_chosen:\n {}'.format(str(packet).replace('\n', '\n\t')))
-        if packet.client_ip_address == '0.0.0.0':
-            return
+        ip = packet.client_ip_address
+        if ip == '0.0.0.0':
+            ip = packet.requested_ip_address
+            if not ip:
+                return
         new_entry = [packet.client_mac_address,
-                     packet.client_ip_address,
+                     ip,
                      packet.host_name or '']
         if not any(list(entry) == new_entry for entry in self.ips.all()):
             self.ips.add(*new_entry)
@@ -326,24 +346,27 @@ class DHCPServer(object):
         requested_ip_address = packet.requested_ip_address
         known_entries = self.ips.get(mac_address)
         ip = None
-        if self.is_valid_client_address(requested_ip_address):
-            ip = requested_ip_address
-        elif known_entries:
+        if known_entries:
             for mac, _ip, host in known_entries:
                 if self.is_valid_client_address(_ip):
                     ip = _ip
+            print('known ip:', ip)
+        elif self.is_valid_client_address(requested_ip_address):
+            ip = requested_ip_address
+            print('valid ip:', ip)
         if ip is None:
             for i in range(5, 250):
                 ip = self.configuration.network[:-1] + str(i)
                 if not self.ips.get(ip):
                     break
+            print('new ip:', ip)
         if not any([entry[1] == ip for entry in known_entries]):
             self.ips.add(mac_address, ip, packet.host_name or '')
         return ip
 
     @property
     def server_identifiers(self):
-        return gethostbyname_ex(gethostname())[2]
+        return get_host_ip_addresses()
 
     def broadcast(self, packet):
         self.configuration.debug('broadcasting:\n {}'.format(str(packet).replace('\n', '\n\t')))
@@ -378,5 +401,8 @@ class DHCPServer(object):
 if __name__ == '__main__':
     configuration = DHCPServerConfiguration()
     configuration.debug = print
+    configuration.adjust_if_this_computer_is_a_router()
+    configuration.router #+= ['192.168.0.1']
+    configuration.ip_address_lease_time = 60
     server = DHCPServer(configuration)
     server.run_in_thread()
