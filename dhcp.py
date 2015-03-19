@@ -28,8 +28,13 @@ class WriteBootProtocolPacket(object):
 
     parameter_order = []
     
-    def __init__(self):
-        pass
+    def __init__(self, configuration):
+        for i in range(256):
+            names = 'option_{}'.format(i)
+            if i < len(options) and hasattr(configuration, options[i][0]):
+                names.append(options[i][0])
+            for name in names:
+                setattr(self, name, getattr(configuration, name))
 
     def to_bytes(self):
         result = bytearray(236)
@@ -161,7 +166,7 @@ class Transaction(object):
 
     def send_offer(self, discovery):
         # https://tools.ietf.org/html/rfc2131
-        offer = WriteBootProtocolPacket()
+        offer = WriteBootProtocolPacket(self.configuration)
         offer.parameter_order = discovery.parameter_request_list
         mac = discovery.client_mac_address
         ip = offer.your_ip_address = self.server.get_ip_address(mac, discovery.requested_ip_address)
@@ -191,7 +196,7 @@ class Transaction(object):
             self.acknowledge(request)
 
     def acknowledge(self, request):
-        ack = WriteBootProtocolPacket()
+        ack = WriteBootProtocolPacket(self.configuration)
         ack.parameter_order = request.parameter_request_list
         ack.transaction_id = request.transaction_id
         # ack.next_server_ip_address =
