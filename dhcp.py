@@ -179,12 +179,6 @@ class Transaction(object):
         offer.bootp_flags = discovery.bootp_flags
         offer.dhcp_message_type = 'DHCPOFFER'
         offer.client_identifier = mac
-        offer.subnet_mask = self.configuration.subnet_mask
-        offer.router = self.configuration.router
-        offer.ip_address_lease_time = self.configuration.ip_address_lease_time
-        offer.server_identifier = self.configuration.server_identifier
-        offer.domain_name_server = self.configuration.domain_name_server
-        offer.broadcast_address = self.configuration.broadcast_address
         self.server.broadcast(offer)
     
     def received_dhcp_request(self, request):
@@ -207,13 +201,7 @@ class Transaction(object):
         requested_ip_address = request.requested_ip_address
         ack.client_ip_address = request.client_ip_address or '0.0.0.0'
         ack.your_ip_address = self.server.get_ip_address(mac, requested_ip_address) # todo: should be asked from the server who knows it
-        ack.subnet_mask = self.configuration.subnet_mask
-        ack.router = self.configuration.router
         ack.dhcp_message_type = 'DHCPACK'
-        ack.ip_address_lease_time = self.configuration.ip_address_lease_time
-        ack.server_identifier = self.configuration.server_identifier
-        ack.domain_name_server = self.configuration.domain_name_server
-        ack.broadcast_address = self.configuration.broadcast_address
         self.server.broadcast(ack)
 
     def received_dhcp_inform(self, inform):
