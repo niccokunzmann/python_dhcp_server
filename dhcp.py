@@ -30,11 +30,12 @@ class WriteBootProtocolPacket(object):
     
     def __init__(self, configuration):
         for i in range(256):
-            names = 'option_{}'.format(i)
+            names = ['option_{}'.format(i)]
             if i < len(options) and hasattr(configuration, options[i][0]):
                 names.append(options[i][0])
             for name in names:
-                setattr(self, name, getattr(configuration, name))
+                if hasattr(configuration, name):
+                    setattr(self, name, getattr(configuration, name))
 
     def to_bytes(self):
         result = bytearray(236)
@@ -161,7 +162,7 @@ class Transaction(object):
 
     def received_dhcp_discover(self, discovery):
         if self.is_done(): return
-        print('discover:\n {}'.format(str(discovery).replace('\n', '\n\t')))
+        self.configuration.debug('discover:\n {}'.format(str(discovery).replace('\n', '\n\t')))
         self.send_offer(discovery)
 
     def send_offer(self, discovery):
@@ -169,7 +170,7 @@ class Transaction(object):
         offer = WriteBootProtocolPacket(self.configuration)
         offer.parameter_order = discovery.parameter_request_list
         mac = discovery.client_mac_address
-        ip = offer.your_ip_address = self.server.get_ip_address(mac, discovery.requested_ip_address)
+        ip = offer.your_ip_address = self.server.get_ip_address(discovery)
         # offer.client_ip_address = 
         offer.transaction_id = discovery.transaction_id
         # offer.next_server_ip_address =
@@ -184,10 +185,8 @@ class Transaction(object):
     def received_dhcp_request(self, request):
         if self.is_done(): return 
         self.server.client_has_chosen(request)
+        self.acknowledge(request)
         self.close()
-        if request.server_identifier in self.server.server_identifiers or \
-           not server.is_valid_client_address(request.requested_ip_address):
-            self.acknowledge(request)
 
     def acknowledge(self, request):
         ack = WriteBootProtocolPacket(self.configuration)
@@ -200,7 +199,7 @@ class Transaction(object):
         ack.client_mac_address = mac
         requested_ip_address = request.requested_ip_address
         ack.client_ip_address = request.client_ip_address or '0.0.0.0'
-        ack.your_ip_address = self.server.get_ip_address(mac, requested_ip_address) # todo: should be asked from the server who knows it
+        ack.your_ip_address = self.server.get_ip_address(request)
         ack.dhcp_message_type = 'DHCPACK'
         self.server.broadcast(ack)
 
@@ -218,11 +217,56 @@ class DHCPServerConfiguration(object):
     network = '192.168.173.0'
     broadcast_address = '255.255.255.255'
     subnet_mask = '255.255.255.0'
-    router = None
+    router = None # list of ips
     # 1 day is 86400
     ip_address_lease_time = 300 # seconds
-    domain_name_server = None
+    domain_name_server = None # list of ips
+
+    ip_file = 'ips.csv'
+
+    debug = lambda *args, **kw: None
     
+
+class IPDatabase(object):
+
+    delimiter = ';'
+
+    def __init__(self, file_name):
+        self.file_name = file_name
+        with open(self.file_name, 'a'):
+            pass # create file
+
+    def get(self, key):
+        lines = []
+        with open(self.file_name) as f:
+            for line in f:
+                line = line.strip().lower().split(self.delimiter)
+                if key.lower() in line:
+                    lines.append(line)
+        return lines
+
+    def add(self, *args):
+        with open(self.file_name, 'a') as f:
+            f.write(self.delimiter.join(args) + '\r\n')
+
+    def delete(self, key):
+        lines = []
+        with open(self.file_name) as f:
+            for line in f:
+                line = line.strip().lower().split(self.delimiter)
+                if key.lower() not in line:
+                    lines.append(line)
+        with open(self.file_name, 'w') as f:
+            for line in lines:
+                f.write(self.delimiter.join(line) + '\r\n')
+
+    def all(self):
+        lines = []
+        with open(self.file_name) as f:
+            for line in f:
+                lines.append(line.strip().split(self.delimiter))
+        return lines
+        
 
 
 class DHCPServer(object):
@@ -235,9 +279,9 @@ class DHCPServer(object):
         self.socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         self.socket.bind(('', 67))
         self.delay_worker = DelayWorker()
-        self.ip_number = 5
         self.closed = False
         self.transactions = collections.defaultdict(lambda: Transaction(self)) # id: transaction
+        self.ips = IPDatabase(self.configuration.ip_file)
 
     def close(self):
         self.socket.close()
@@ -258,10 +302,17 @@ class DHCPServer(object):
 
     def received(self, packet):
         if not self.transactions[packet.transaction_id].receive(packet):
-            print('received:\n {}'.format(str(packet).replace('\n', '\n\t')))
+            self.configuration.debug('received:\n {}'.format(str(packet).replace('\n', '\n\t')))
 
     def client_has_chosen(self, packet):
-        print('client_has_chosen:\n {}'.format(str(packet).replace('\n', '\n\t')))
+        self.configuration.debug('client_has_chosen:\n {}'.format(str(packet).replace('\n', '\n\t')))
+        if packet.client_ip_address == '0.0.0.0':
+            return
+        new_entry = [packet.client_mac_address,
+                     packet.client_ip_address,
+                     packet.host_name or '']
+        if not any(entry == new_entry for entry in self.ips.all()):
+            self.ips.add(*new_entry)
 
     def is_valid_client_address(self, address):
         if address is None:
@@ -271,18 +322,32 @@ class DHCPServer(object):
         n = self.configuration.network.split('.')
         return all(s[i] == '0' or a[i] == n[i] for i in range(4))
 
-    def get_ip_address(self, mac_address, requested_ip_address):
+    def get_ip_address(self, packet):
+        mac_address = packet.client_mac_address
+        requested_ip_address = packet.requested_ip_address
+        known_entries = self.ips.get(mac_address)
+        ip = None
         if self.is_valid_client_address(requested_ip_address):
-            return requested_ip_address
-        self.ip_number = (self.ip_number + 1) % 200 + 5
-        return self.configuration.network[:-1] + str(self.ip_number)
+            ip = requested_ip_address
+        elif known_entries:
+            for mac, _ip, host in known_entries:
+                if self.is_valid_client_address(_ip):
+                    ip = _ip
+        if ip is None:
+            for i in range(5, 250):
+                ip = self.configuration.network[:-1] + str(i)
+                if not self.ips.get(ip):
+                    break
+        if not any([entry[0] == ip for entry in known_entries]):
+            self.ips.add(mac_address, ip, packet.host_name or '')
+        return ip
 
     @property
     def server_identifiers(self):
         return gethostbyname_ex(gethostname())[2]
 
     def broadcast(self, packet):
-        print('broadcasting:\n {}'.format(str(packet).replace('\n', '\n\t')))
+        self.configuration.debug('broadcasting:\n {}'.format(str(packet).replace('\n', '\n\t')))
         for addr in self.server_identifiers:
             broadcast_socket = socket(type = SOCK_DGRAM)
             broadcast_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -305,7 +370,14 @@ class DHCPServer(object):
         thread.start()
         return thread
 
+    def debug_clients(self):
+        for line in self.ips.all():
+            line = '\t'.join(line)
+            if line:
+                self.configuration.debug(line)
+
 if __name__ == '__main__':
     configuration = DHCPServerConfiguration()
+    configuration.debug = print
     server = DHCPServer(configuration)
     server.run_in_thread()
