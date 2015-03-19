@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from dhcp import *
 from tkinter import *
 
