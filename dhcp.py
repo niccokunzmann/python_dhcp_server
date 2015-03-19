@@ -209,11 +209,10 @@ class Transaction(object):
 
 class DHCPServerConfiguration(object):
     
-    dhcp_offer_after_seconds = 10
-    dhcp_acknowledge_after_seconds = 0
+    dhcp_offer_after_seconds = 5
+    dhcp_acknowledge_after_seconds = 5
     length_of_transaction = 20
 
-    server_identifier = '0.0.0.0'
     network = '192.168.173.0'
     broadcast_address = '255.255.255.255'
     subnet_mask = '255.255.255.0'
@@ -311,7 +310,7 @@ class DHCPServer(object):
         new_entry = [packet.client_mac_address,
                      packet.client_ip_address,
                      packet.host_name or '']
-        if not any(entry == new_entry for entry in self.ips.all()):
+        if not any(list(entry) == new_entry for entry in self.ips.all()):
             self.ips.add(*new_entry)
 
     def is_valid_client_address(self, address):
@@ -338,7 +337,7 @@ class DHCPServer(object):
                 ip = self.configuration.network[:-1] + str(i)
                 if not self.ips.get(ip):
                     break
-        if not any([entry[0] == ip for entry in known_entries]):
+        if not any([entry[1] == ip for entry in known_entries]):
             self.ips.add(mac_address, ip, packet.host_name or '')
         return ip
 
