@@ -28,3 +28,5 @@ def update_text():
 update_text()
 
 root.mainloop()
+
+server.close()
