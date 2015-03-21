@@ -18,7 +18,7 @@ last_text = None
 def update_text():
     global last_text
     root.after(100, update_text)
-    entries = server.ips.all()
+    entries = server.get_current_entries()
     text = '\n'.join(line for line in ('\t'.join(entry) for entry in entries) if line)
     if text != last_text:
         last_text = text

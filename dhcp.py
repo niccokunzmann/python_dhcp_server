@@ -286,6 +286,11 @@ class IPDatabase(object):
                 lines.append(line.strip().split(self.delimiter))
         return lines
 
+def sorted_entries(entries):
+    entries = list(entries)
+    entries.sort(key = lambda entry: (entry[2].lower(), entry[0].lower(), entry[1].lower()))
+    return entries
+
 class DHCPServer(object):
 
     def __init__(self, configuration = None):
@@ -299,6 +304,7 @@ class DHCPServer(object):
         self.closed = False
         self.transactions = collections.defaultdict(lambda: Transaction(self)) # id: transaction
         self.ips = IPDatabase(self.configuration.ip_file)
+        self.chosen_addresses = set()
 
     def close(self):
         self.socket.close()
@@ -322,6 +328,9 @@ class DHCPServer(object):
             self.configuration.debug('received:\n {}'.format(str(packet).replace('\n', '\n\t')))
 
     def client_has_chosen(self, packet):
+        self.chosen_addresses.add((packet.client_mac_address,
+                                   packet.requested_ip_address or packet.client_ip_address,
+                                   packet.host_name or ''))
         self.configuration.debug('client_has_chosen:\n {}'.format(str(packet).replace('\n', '\n\t')))
         ip = packet.client_ip_address
         if ip == '0.0.0.0':
@@ -398,6 +407,12 @@ class DHCPServer(object):
             line = '\t'.join(line)
             if line:
                 self.configuration.debug(line)
+
+    def get_all_entries(self):
+        return sorted_entries(self.ips.all())
+
+    def get_current_entries(self):
+        return sorted_entries(self.chosen_addresses)
 
 if __name__ == '__main__':
     configuration = DHCPServerConfiguration()
