@@ -421,4 +421,4 @@ if __name__ == '__main__':
     configuration.router #+= ['192.168.0.1']
     configuration.ip_address_lease_time = 60
     server = DHCPServer(configuration)
-    server.run_in_thread()
+    server.run()
