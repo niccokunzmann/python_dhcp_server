@@ -42,6 +42,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-.pyc
-/__pycache__
+*.pyc
+__pycache__
 ips.csv
