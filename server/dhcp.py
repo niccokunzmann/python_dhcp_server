@@ -4,6 +4,7 @@ import threading
 import struct
 import queue
 import collections
+import traceback
 
 from listener import *
 
@@ -288,8 +289,23 @@ class IPDatabase(object):
 
 def sorted_entries(entries):
     entries = list(entries)
-    entries.sort(key = lambda entry: (entry[2].lower(), entry[0].lower(), entry[1].lower()))
+    entries.sort(key = lambda entry: entry.key)
     return entries
+
+CurrentEntry = collections.namedtuple('CurrentEntry',
+                                      ('mac', 'ip', 'hostname', 'last_received'))
+
+class CurrentEntry(CurrentEntry):
+
+    def __hash__(self):
+        return hash(self.key)
+
+    def __eq__(self, other):
+        return self.key == other.key
+
+    @property
+    def key(self):
+        return self.hostname.lower(), self.mac.lower(), self.ip.lower()
 
 class DHCPServer(object):
 
@@ -304,7 +320,7 @@ class DHCPServer(object):
         self.closed = False
         self.transactions = collections.defaultdict(lambda: Transaction(self)) # id: transaction
         self.ips = IPDatabase(self.configuration.ip_file)
-        self.chosen_addresses = set()
+        self.chosen_addresses = []
 
     def close(self):
         self.socket.close()
@@ -327,10 +343,18 @@ class DHCPServer(object):
         if not self.transactions[packet.transaction_id].receive(packet):
             self.configuration.debug('received:\n {}'.format(str(packet).replace('\n', '\n\t')))
 
+    def add_chosen_address(self, packet):
+        entry = CurrentEntry(packet.client_mac_address,
+                             packet.requested_ip_address or packet.client_ip_address,
+                             packet.host_name or '',
+                             time.time())
+        if entry in self.chosen_addresses:
+            self.chosen_addresses.remove(entry)
+        self.chosen_addresses.append(entry)
+        print([e.last_received for e in self.chosen_addresses])
+
     def client_has_chosen(self, packet):
-        self.chosen_addresses.add((packet.client_mac_address,
-                                   packet.requested_ip_address or packet.client_ip_address,
-                                   packet.host_name or ''))
+        self.add_chosen_address(packet)
         self.configuration.debug('client_has_chosen:\n {}'.format(str(packet).replace('\n', '\n\t')))
         ip = packet.client_ip_address
         if ip == '0.0.0.0':
@@ -395,7 +419,10 @@ class DHCPServer(object):
 
     def run(self):
         while not self.closed:
-            self.update(1)
+            try:
+                self.update(1)
+            except:
+                traceback.print_exc()
 
     def run_in_thread(self):
         thread = threading.Thread(target = self.run)
