@@ -351,7 +351,6 @@ class DHCPServer(object):
         if entry in self.chosen_addresses:
             self.chosen_addresses.remove(entry)
         self.chosen_addresses.append(entry)
-        print([e.last_received for e in self.chosen_addresses])
 
     def client_has_chosen(self, packet):
         self.add_chosen_address(packet)
