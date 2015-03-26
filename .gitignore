@@ -45,3 +45,5 @@ Temporary Items
 *.pyc
 __pycache__
 ips.csv
+/releases
+/standalone/DHCPGui.exe
