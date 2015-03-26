@@ -37,7 +37,7 @@ def macunpack(data):
     return ':'.join([s[i:i+2].decode('ascii') for i in range(0, 12, 2)])
 
 def macpack(mac):
-    return base64.b16decode(mac.replace(':', '').replace('-', ''))
+    return base64.b16decode(mac.replace(':', '').replace('-', '').encode('ascii'))
 
 def unpackbool(data):
     return data[0]
