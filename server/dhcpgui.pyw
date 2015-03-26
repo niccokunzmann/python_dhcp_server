@@ -4,7 +4,7 @@ from tkinter import *
 
 root = Tk()
 root.title('MAC, IP & Computer')
-info_text = Text(root)
+info_text = Text(root, height = 12, width = 45)
 info_text.pack(fill = BOTH, expand = True)
 
 configuration = DHCPServerConfiguration()
