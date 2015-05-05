@@ -5,6 +5,7 @@ import struct
 import queue
 import collections
 import traceback
+import random
 
 from listener import *
 
@@ -388,10 +389,15 @@ class DHCPServer(object):
             ip = requested_ip_address
             print('valid ip:', ip)
         if ip is None:
-            for i in range(5, 250):
+            chosen = False
+            for i in range(5, 251):
                 ip = self.configuration.network[:-1] + str(i)
                 if not self.ips.get(ip):
+                    chosen = True
                     break
+            if not chosen:
+                i = random.randint(0, 250)
+                ip = self.configuration.network[:-1] + str(i)
             print('new ip:', ip)
         if not any([entry[1] == ip for entry in known_entries]):
             self.ips.add(mac_address, ip, packet.host_name or '')
