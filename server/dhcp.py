@@ -228,7 +228,7 @@ class DHCPServerConfiguration(object):
     ip_address_lease_time = 300 # seconds
     domain_name_server = None # list of ips
 
-    ip_file = 'ips.csv'
+    host_file = 'hosts.csv'
 
     debug = lambda *args, **kw: None
 
@@ -248,38 +248,63 @@ class DHCPServerConfiguration(object):
                 #self.non_local_source_routing_enabled = True
                 #self.perform_mask_discovery = True
 
-class IPDatabase(object):
+class ALL(object):
+    def __eq__(self, other):
+        return True
+    def __repr__(self):
+        return self.__class__.__name__
+ALL = ALL()
+
+class GREATER(object):
+    def __init__(self, value):
+        self.value = value
+    def __eq__(self, other):
+        return type(self.value)(other) > self.value
+
+class NETWORK(object):
+    def __init__(self, network):
+        self.match = [(ALL if part == '0' else part) for part in network.split('0')]
+    def __eq__(self, other):
+        return self.match == other.split('.')
+        
+class CASEINSENSITIVE(object):
+    def __init__(self, s):
+        self.s = s.lower()
+    def __eq__(self, other):
+        return self.s == other.lower()
+
+class CSVDatabase(object):
 
     delimiter = ';'
 
     def __init__(self, file_name):
         self.file_name = file_name
-        with open(self.file_name, 'a'):
-            pass # create file
+        self.file('a').close() # create file
 
-    def get(self, key):
+    def file(self, mode = 'r'):
+        return open(self.file_name, mode)
+
+    def get(self, pattern):
+        pattern = list(pattern)
         lines = []
-        with open(self.file_name) as f:
+        with self.file() as f:
             for line in f:
-                line = line.strip().lower().split(self.delimiter)
-                if key.lower() in line:
+                line = list(line.strip().split(self.delimiter))
+                if pattern == line:
                     lines.append(line)
         return lines
 
-    def add(self, *args):
-        with open(self.file_name, 'a') as f:
-            f.write(self.delimiter.join(args) + '\r\n')
+    def add(self, line):
+        with self.file('a') as f:
+            f.write(self.delimiter.join(line) + '\n')
 
-    def delete(self, key):
-        lines = []
-        with open(self.file_name) as f:
-            for line in f:
-                line = line.strip().lower().split(self.delimiter)
-                if key.lower() not in line:
-                    lines.append(line)
-        with open(self.file_name, 'w') as f:
-            for line in lines:
-                f.write(self.delimiter.join(line) + '\r\n')
+    def delete(self, pattern):
+        lines = self.all()
+        lines_to_delete = self.get(pattern)
+        self.file('w').close() # empty file
+        for line in lines:
+            if line not in lines_to_delete:
+                self.add(line)
 
     def all(self):
         lines = []
@@ -288,25 +313,76 @@ class IPDatabase(object):
                 lines.append(line.strip().split(self.delimiter))
         return lines
 
-def sorted_entries(entries):
-    entries = list(entries)
-    entries.sort(key = lambda entry: entry.key)
-    return entries
+class Host(object):
 
-CurrentEntry = collections.namedtuple('CurrentEntry',
-                                      ('mac', 'ip', 'hostname', 'last_received'))
+    def __init__(self, mac, ip, hostname, last_used):
+        self.mac = mac.upper()
+        self.ip = ip
+        self.hostname = hostname
+        self.last_used = int(last_used)
 
-class CurrentEntry(CurrentEntry):
+    @classmethod
+    def from_tuple(cls, line):
+        mac, ip, hostname, last_used = line
+        last_used = int(last_used)
+        return cls(mac, ip, hostname, last_used)
+
+    @classmethod
+    def from_packet(cls, packet):
+        return cls(packet.client_mac_address,
+                   packet.requested_ip_address or packet.client_ip_address,
+                   packet.host_name or '',
+                   int(time.time()))
+
+    @staticmethod
+    def get_pattern(mac = ALL, ip = ALL, hostname = ALL, last_used = ALL):
+        return [mac, ip, hostname, last_used]
+
+    def to_tuple(self):
+        return [self.mac, self.ip, self.hostname, str(int(self.last_used))]
+
+    def to_pattern(self):
+        return self.get_pattern(ip = self.ip, mac = self.mac)
 
     def __hash__(self):
         return hash(self.key)
 
     def __eq__(self, other):
-        return self.key == other.key
+        return self.to_tuple() == other.to_tuple()
 
-    @property
-    def key(self):
-        return self.hostname.lower(), self.mac.lower(), self.ip.lower()
+    def has_valid_ip(self):
+        return self.ip and self.ip != '0.0.0.0'
+        
+
+class HostDatabase(object):
+    def __init__(self, file_name):
+        self.db = CSVDatabase(file_name)
+
+    def get(self, **kw):
+        pattern = Host.get_pattern(**kw)
+        return list(map(Host.from_tuple, self.db.get(pattern)))
+
+    def add(self, host):
+        self.db.add(host.to_tuple())
+
+    def delete(self, host = None, **kw):
+        if host is None:
+            pattern = Host.get_pattern(**kw)
+        else:
+            pattern = host.to_pattern()
+        self.db.delete(pattern)
+
+    def all(self):
+        return list(map(Host.from_tuple, self.db.all()))
+
+    def replace(self, host):
+        self.delete(host)
+        self.add(host)
+        
+def sorted_hosts(hosts):
+    hosts = list(hosts)
+    hosts.sort(key = lambda host: (host.hostname.lower(), host.mac.lower(), host.ip.lower()))
+    return hosts
 
 class DHCPServer(object):
 
@@ -320,8 +396,8 @@ class DHCPServer(object):
         self.delay_worker = DelayWorker()
         self.closed = False
         self.transactions = collections.defaultdict(lambda: Transaction(self)) # id: transaction
-        self.ips = IPDatabase(self.configuration.ip_file)
-        self.chosen_addresses = []
+        self.hosts = HostDatabase(self.configuration.host_file)
+        self.time_started = time.time()
 
     def close(self):
         self.socket.close()
@@ -331,10 +407,19 @@ class DHCPServer(object):
             transaction.close()
 
     def update(self, timeout = 0):
-        reads = select.select([self.socket], [], [], timeout)[0]
+        try:
+            reads = select.select([self.socket], [], [], timeout)[0]
+        except ValueError:
+            # ValueError: file descriptor cannot be a negative integer (-1)
+            return
         for socket in reads:
-            packet = ReadBootProtocolPacket(*socket.recvfrom(4096))
-            self.received(packet)
+            try:
+                packet = ReadBootProtocolPacket(*socket.recvfrom(4096))
+            except OSError:
+                # OSError: [WinError 10038] An operation was attempted on something that is not a socket
+                pass
+            else:
+                self.received(packet)
         for transaction_id, transaction in list(self.transactions.items()):
             if transaction.is_done():
                 transaction.close()
@@ -343,29 +428,13 @@ class DHCPServer(object):
     def received(self, packet):
         if not self.transactions[packet.transaction_id].receive(packet):
             self.configuration.debug('received:\n {}'.format(str(packet).replace('\n', '\n\t')))
-
-    def add_chosen_address(self, packet):
-        entry = CurrentEntry(packet.client_mac_address,
-                             packet.requested_ip_address or packet.client_ip_address,
-                             packet.host_name or '',
-                             time.time())
-        if entry in self.chosen_addresses:
-            self.chosen_addresses.remove(entry)
-        self.chosen_addresses.append(entry)
-
+            
     def client_has_chosen(self, packet):
-        self.add_chosen_address(packet)
         self.configuration.debug('client_has_chosen:\n {}'.format(str(packet).replace('\n', '\n\t')))
-        ip = packet.client_ip_address
-        if ip == '0.0.0.0':
-            ip = packet.requested_ip_address
-            if not ip:
-                return
-        new_entry = [packet.client_mac_address,
-                     ip,
-                     packet.host_name or '']
-        if not any(list(entry) == new_entry for entry in self.ips.all()):
-            self.ips.add(*new_entry)
+        host = Host.from_packet(packet)
+        if not host.has_valid_ip():
+            return
+        self.hosts.replace(host)
 
     def is_valid_client_address(self, address):
         if address is None:
@@ -378,29 +447,36 @@ class DHCPServer(object):
     def get_ip_address(self, packet):
         mac_address = packet.client_mac_address
         requested_ip_address = packet.requested_ip_address
-        known_entries = self.ips.get(mac_address)
+        known_hosts = self.hosts.get(mac = CASEINSENSITIVE(mac_address))
         ip = None
-        if known_entries:
-            for mac, _ip, host in known_entries:
-                if self.is_valid_client_address(_ip):
-                    ip = _ip
+        if known_hosts:
+            # 1. choose known ip address
+            for host in known_hosts:
+                if self.is_valid_client_address(host.ip):
+                    ip = host.ip
             print('known ip:', ip)
-        elif self.is_valid_client_address(requested_ip_address):
+        if ip is None and self.is_valid_client_address(requested_ip_address):
+            # 2. choose valid requested ip address
             ip = requested_ip_address
             print('valid ip:', ip)
         if ip is None:
+            # 3. choose new, free ip address
             chosen = False
+            network_hosts = self.hosts.get(ip = NETWORK(self.configuration.network))
             for i in range(5, 251):
                 ip = self.configuration.network[:-1] + str(i)
-                if not self.ips.get(ip):
+                if not any(host.ip == ip for host in network_hosts):
                     chosen = True
                     break
             if not chosen:
-                i = random.randint(0, 250)
-                ip = self.configuration.network[:-1] + str(i)
+                # 4. reuse old valid ip address
+                network_hosts.sort(lambda host: host.last_used)
+                ip = network_hosts[0].ip
+                assert is_valid_client_address(ip)
             print('new ip:', ip)
-        if not any([entry[1] == ip for entry in known_entries]):
-            self.ips.add(mac_address, ip, packet.host_name or '')
+        if not any([host.ip == ip for host in known_hosts]):
+            print('add', mac_address, ip, packet.host_name)
+            self.hosts.replace(Host(mac_address, ip, packet.host_name or '', time.time()))
         return ip
 
     @property
@@ -426,6 +502,8 @@ class DHCPServer(object):
         while not self.closed:
             try:
                 self.update(1)
+            except KeyboardInterrupt:
+                break
             except:
                 traceback.print_exc()
 
@@ -440,11 +518,11 @@ class DHCPServer(object):
             if line:
                 self.configuration.debug(line)
 
-    def get_all_entries(self):
-        return sorted_entries(self.ips.all())
+    def get_all_hosts(self):
+        return sorted_hosts(self.hosts.get())
 
-    def get_current_entries(self):
-        return sorted_entries(self.chosen_addresses)
+    def get_current_hosts(self):
+        return sorted_hosts(self.hosts.get(last_used = GREATER(self.time_started)))
 
 if __name__ == '__main__':
     configuration = DHCPServerConfiguration()
