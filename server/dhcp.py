@@ -545,5 +545,5 @@ if __name__ == '__main__':
     configuration.ip_address_lease_time = 60
     server = DHCPServer(configuration)
     for ip in server.configuration.all_ip_addresses():
-	assert ip == server.configuration.network_filter()
+        assert ip == server.configuration.network_filter()
     server.run()
