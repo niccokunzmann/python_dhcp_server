@@ -6,6 +6,7 @@ import queue
 import collections
 import traceback
 import random
+import socket
 
 from listener import *
 
@@ -248,6 +249,24 @@ class DHCPServerConfiguration(object):
                 #self.non_local_source_routing_enabled = True
                 #self.perform_mask_discovery = True
 
+    def all_ip_addresses(self):
+        ips = ip_addresses(self.network, self.subnet_mask)
+        for i in range(5):
+            next(ips)
+        return ips
+
+    def network_filter(self):
+        return NETWORK(self.network, self.subnet_mask)
+
+def ip_addresses(network, subnet_mask):
+    import socket, struct
+    subnet_mask = struct.unpack('>I', socket.inet_aton(subnet_mask))[0]
+    network = struct.unpack('>I', socket.inet_aton(network))[0]
+    network = network & subnet_mask
+    start = network + 1
+    end = (network | (~subnet_mask & 0xffffffff))
+    return (socket.inet_ntoa(struct.pack('>I', i)) for i in range(start, end))
+
 class ALL(object):
     def __eq__(self, other):
         return True
@@ -262,10 +281,14 @@ class GREATER(object):
         return type(self.value)(other) > self.value
 
 class NETWORK(object):
-    def __init__(self, network):
-        self.match = [(ALL if part == '0' else part) for part in network.split('0')]
+    def __init__(self, network, subnet_mask):
+        self.subnet_mask = struct.unpack('>I', inet_aton(subnet_mask))[0]
+        self.network = struct.unpack('>I', inet_aton(network))[0]
     def __eq__(self, other):
-        return self.match == other.split('.')
+        ip = struct.unpack('>I', inet_aton(other))[0]
+        return ip & self.subnet_mask == self.network and \
+               ip - self.network and \
+               ip - self.network != ~self.subnet_mask & 0xffffffff
         
 class CASEINSENSITIVE(object):
     def __init__(self, s):
@@ -286,13 +309,7 @@ class CSVDatabase(object):
 
     def get(self, pattern):
         pattern = list(pattern)
-        lines = []
-        with self.file() as f:
-            for line in f:
-                line = list(line.strip().split(self.delimiter))
-                if pattern == line:
-                    lines.append(line)
-        return lines
+        return [line for line in self.all() if pattern == line]
 
     def add(self, line):
         with self.file('a') as f:
@@ -307,11 +324,8 @@ class CSVDatabase(object):
                 self.add(line)
 
     def all(self):
-        lines = []
-        with open(self.file_name) as f:
-            for line in f:
-                lines.append(line.strip().split(self.delimiter))
-        return lines
+        with self.file() as f:
+            return [list(line.strip().split(self.delimiter)) for line in f]
 
 class Host(object):
 
@@ -462,17 +476,16 @@ class DHCPServer(object):
         if ip is None:
             # 3. choose new, free ip address
             chosen = False
-            network_hosts = self.hosts.get(ip = NETWORK(self.configuration.network))
-            for i in range(5, 251):
-                ip = self.configuration.network[:-1] + str(i)
+            network_hosts = self.hosts.get(ip = self.configuration.network_filter())
+            for ip in self.configuration.all_ip_addresses():
                 if not any(host.ip == ip for host in network_hosts):
                     chosen = True
                     break
             if not chosen:
                 # 4. reuse old valid ip address
-                network_hosts.sort(lambda host: host.last_used)
+                network_hosts.sort(key = lambda host: host.last_used)
                 ip = network_hosts[0].ip
-                assert is_valid_client_address(ip)
+                assert self.is_valid_client_address(ip)
             print('new ip:', ip)
         if not any([host.ip == ip for host in known_hosts]):
             print('add', mac_address, ip, packet.host_name)
@@ -531,4 +544,6 @@ if __name__ == '__main__':
     configuration.router #+= ['192.168.0.1']
     configuration.ip_address_lease_time = 60
     server = DHCPServer(configuration)
+    for ip in server.configuration.all_ip_addresses():
+	assert ip == server.configuration.network_filter()
     server.run()
