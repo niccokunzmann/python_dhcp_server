@@ -121,16 +121,17 @@ class DelayWorker(object):
 
     def _delay_response_thread(self):
         while not self.closed:
-            p = self.queue.get()
             if self.closed:
                 break
-            t, func, args, kw = p
-            now = time.time()
-            if now < t:
-                time.sleep(0.01)
-                self.queue.put(p)
-            else:
-                func(*args, **kw)
+            if not self.queue.empty():
+                p = self.queue.get()
+                t, func, args, kw = p
+                now = time.time()
+                if now < t:
+                    time.sleep(0.01)
+                    self.queue.put(p)
+                else:
+                    func(*args, **kw)
 
     def do_after(self, seconds, func, args = (), kw = {}):
         self.queue.put((time.time() + seconds, func, args, kw))
