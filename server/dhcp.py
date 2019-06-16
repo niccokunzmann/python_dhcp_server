@@ -123,8 +123,8 @@ class DelayWorker(object):
         while not self.closed:
             if self.closed:
                 break
-            if not self.queue.empty():
-                p = self.queue.get()
+            try:
+                p = self.queue.get(timeout=1)
                 t, func, args, kw = p
                 now = time.time()
                 if now < t:
@@ -132,6 +132,8 @@ class DelayWorker(object):
                     self.queue.put(p)
                 else:
                     func(*args, **kw)
+            except queue.Empty: 
+                continue
 
     def do_after(self, seconds, func, args = (), kw = {}):
         self.queue.put((time.time() + seconds, func, args, kw))
