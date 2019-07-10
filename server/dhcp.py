@@ -21,6 +21,7 @@ class PriorityQueue(object):
 
     def put(self, item):
         heapq.heappush(self._queue, (self._index, item))
+        self._index += 1
 
     def get(self):
         return heapq.heappop(self._queue)[-1]
