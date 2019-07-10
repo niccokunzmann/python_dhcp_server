@@ -7,12 +7,26 @@ import collections
 import traceback
 import random
 import socket
+import heapq    
 
 from listener import *
 
 def get_host_ip_addresses():
     return gethostbyname_ex(gethostname())[2]
 
+class PriorityQueue(object):
+    def __init__(self):
+        self._queue = []
+        self._index = 0
+
+    def put(self, item):
+        heapq.heappush(self._queue, (self._index, item))
+
+    def get(self):
+        return heapq.heappop(self._queue)[-1]
+
+    def qsize(self):
+        return len(self._queue)
 
 class WriteBootProtocolPacket(object):
 
@@ -115,7 +129,7 @@ class DelayWorker(object):
 
     def __init__(self):
         self.closed = False
-        self.queue = queue.PriorityQueue()
+        self.queue = PriorityQueue()
         self.thread = threading.Thread(target = self._delay_response_thread)
         self.thread.start()
 
@@ -123,8 +137,8 @@ class DelayWorker(object):
         while not self.closed:
             if self.closed:
                 break
-            try:
-                p = self.queue.get(timeout=1)
+            if self.queue.qsize() > 0:
+                p = self.queue.get()
                 t, func, args, kw = p
                 now = time.time()
                 if now < t:
@@ -132,8 +146,7 @@ class DelayWorker(object):
                     self.queue.put(p)
                 else:
                     func(*args, **kw)
-            except queue.Empty: 
-                continue
+
 
     def do_after(self, seconds, func, args = (), kw = {}):
         self.queue.put((time.time() + seconds, func, args, kw))
