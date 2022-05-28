@@ -224,6 +224,7 @@ class DHCPServerConfiguration(object):
     dhcp_acknowledge_after_seconds = 10
     length_of_transaction = 40
 
+    bind_address = ''
     network = '192.168.173.0'
     broadcast_address = '255.255.255.255'
     subnet_mask = '255.255.255.0'
@@ -409,7 +410,7 @@ class DHCPServer(object):
         self.configuration = configuration
         self.socket = socket(type = SOCK_DGRAM)
         self.socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-        self.socket.bind(('', 67))
+        self.socket.bind((self.configuration.bind_address, 67))
         self.delay_worker = DelayWorker()
         self.closed = False
         self.transactions = collections.defaultdict(lambda: Transaction(self)) # id: transaction
