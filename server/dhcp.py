@@ -115,7 +115,7 @@ class DelayWorker(object):
 
     def __init__(self):
         self.closed = False
-        self.queue = queue.PriorityQueue()
+        self.queue = queue.Queue()
         self.thread = threading.Thread(target = self._delay_response_thread)
         self.thread.start()
 
