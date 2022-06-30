@@ -1,6 +1,12 @@
 #!/usr/bin/python3
 from dhcp import *
-from tkinter import *
+try:
+    from tkinter import *
+except ImportError:
+    print("Install tkinter!")
+    print("    sudo apt-get install python3-tk")
+    input("Press ENTER to exit!")
+    exit(1)
 import sys
 import os
 
