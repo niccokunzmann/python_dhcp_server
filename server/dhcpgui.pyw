@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 from dhcp import *
 from tkinter import *
+import sys
+import os
+
+HERE = os.path.dirname(sys.argv[0])
 
 root = Tk()
 root.title('MAC, IP & Computer')
@@ -10,7 +14,7 @@ info_text.pack(fill = BOTH, expand = True)
 configuration = DHCPServerConfiguration()
 configuration.debug = print
 #configuration.adjust_if_this_computer_is_a_router()
-configuration.load('dhcpgui.conf')
+configuration.load(os.path.join(HERE, 'dhcpgui.conf'))
 server = DHCPServer(configuration)
 server.run_in_thread()
 
