@@ -34,8 +34,17 @@ Linux
 Under Linux you can download the [source code][zip] and install Python 3 and Tkinter for Python 3:
 
 ```
-sudo apt-get install python3 idle-python3
+sudo apt-get install python3 python3-tk
 ```
+
+There are different ways to start:
+1. You can use the `python_dhcp_server.desktop` and double-click it.
+    If it does not open, please [report it][issues] and try the next one.
+2. You can run the following command provided you are in the `server`
+    directory.
+    ```
+    python3 ./dhcpgui.pyw
+    ```
 
 Related Work
 ------------
@@ -45,3 +54,4 @@ Related Work
 
 [releases]: https://github.com/niccokunzmann/python_dhcp_server/releases
 [zip]: https://github.com/niccokunzmann/python_dhcp_server/archive/refs/heads/master.zip
+[issues]: https://github.com/niccokunzmann/python_dhcp_server/issues
