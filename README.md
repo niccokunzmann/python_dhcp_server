@@ -53,7 +53,7 @@ This program was created to find Raspberry Pis in the network.
 
 - [Adafruit-Pi-Finder](https://github.com/adafruit/Adafruit-Pi-Finder) - finde deinen Raspberry Pi im Netzwerk
 
-New Released
+New Releases
 ------------
 
 When the source code is changed, create a new release.
