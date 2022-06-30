@@ -25,7 +25,7 @@ Contributions welcome!
 Windows
 -------
 
-You can install this software by downloading the [release][releases] named `python_dhcp_server_standalone_X.Y.zip`.tible
+You can install this software by downloading the [release][releases] named `python_dhcp_server_standalone_X.Y.zip` file.
 Unpack the zip file, you will find an executable `.exe` file inside.
 
 Linux
@@ -43,7 +43,7 @@ There are different ways to start:
 2. You can run the following command provided you are in the `server`
     directory.
     ```
-    python3 ./dhcpgui.pyw
+    sudo python3 ./dhcpgui.pyw
     ```
 
 Related Work
