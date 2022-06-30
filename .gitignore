@@ -48,3 +48,5 @@ __pycache__
 /releases
 /standalone/DHCPGui.exe
 hosts.csv
+
+*.swp
