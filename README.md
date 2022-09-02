@@ -52,6 +52,7 @@ Related Work
 This program was created to find Raspberry Pis in the network.
 
 - [Adafruit-Pi-Finder](https://github.com/adafruit/Adafruit-Pi-Finder) - finde deinen Raspberry Pi im Netzwerk
+- [Angry IP](https://angryip.org/) (Windows)
 
 New Releases
 ------------
