@@ -466,6 +466,7 @@ class DHCPServer(object):
         mac_address = packet.client_mac_address
         requested_ip_address = packet.requested_ip_address
         known_hosts = self.hosts.get(mac = CASEINSENSITIVE(mac_address))
+        assigned_addresses = set(host.ip for host in self.hosts.get())
         ip = None
         if known_hosts:
             # 1. choose known ip address
@@ -473,7 +474,7 @@ class DHCPServer(object):
                 if self.is_valid_client_address(host.ip):
                     ip = host.ip
             print('known ip:', ip)
-        if ip is None and self.is_valid_client_address(requested_ip_address):
+        if ip is None and self.is_valid_client_address(requested_ip_address) and ip not in assigned_addresses:
             # 2. choose valid requested ip address
             ip = requested_ip_address
             print('valid ip:', ip)
