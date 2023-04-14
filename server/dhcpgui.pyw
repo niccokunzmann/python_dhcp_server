@@ -14,7 +14,7 @@ HERE = os.path.dirname(sys.argv[0])
 
 root = Tk()
 root.title('MAC, IP & Computer')
-info_text = Text(root, height = 12, width = 50)
+info_text = Text(root, height = 12, width = 80)
 info_text.pack(fill = BOTH, expand = True)
 
 configuration = DHCPServerConfiguration()
