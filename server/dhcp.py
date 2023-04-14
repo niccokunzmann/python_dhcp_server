@@ -67,13 +67,14 @@ class WriteBootProtocolPacket(object):
         
         result += inet_aton(self.magic_cookie)
 
-        for option in self.options:
-            value = self.get_option(option)
-            #print(option, value)
-            if value is None:
-                continue
-            result += bytes([option, len(value)]) + value
-        result += bytes([255])
+        if self.options:
+            for option in self.options:
+                value = self.get_option(option)
+                #print(option, value)
+                if value is None:
+                    continue
+                result += bytes([option, len(value)]) + value
+            result += bytes([255])
         return bytes(result)
 
     def get_option(self, option):
@@ -92,11 +93,12 @@ class WriteBootProtocolPacket(object):
     def options(self):
         done = list()
         # fulfill wishes
-        for option in self.parameter_order:
-            if option < len(options) and hasattr(self, options[option][0]) or hasattr(self, 'option_{}'.format(option)):
-                # this may break with the specification because we must try to fulfill the wishes
-                if option not in done:
-                    done.append(option)
+        if self.parameter_order:
+            for option in self.parameter_order:
+                if option < len(options) and hasattr(self, options[option][0]) or hasattr(self, 'option_{}'.format(option)):
+                    # this may break with the specification because we must try to fulfill the wishes
+                    if option not in done:
+                        done.append(option)
         # add my stuff
         for option, o in enumerate(options):
             if o[0] and hasattr(self, o[0]):
