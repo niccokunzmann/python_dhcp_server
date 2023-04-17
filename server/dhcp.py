@@ -74,7 +74,7 @@ class WriteBootProtocolPacket(object):
                 if value is None:
                     continue
                 result += bytes([option, len(value)]) + value
-            result += bytes([255])
+        result += bytes([255])
         return bytes(result)
 
     def get_option(self, option):
