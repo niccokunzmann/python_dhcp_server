@@ -67,12 +67,13 @@ class WriteBootProtocolPacket(object):
         
         result += inet_aton(self.magic_cookie)
 
-        for option in self.options:
-            value = self.get_option(option)
-            #print(option, value)
-            if value is None:
-                continue
-            result += bytes([option, len(value)]) + value
+        if self.options:
+            for option in self.options:
+                value = self.get_option(option)
+                #print(option, value)
+                if value is None:
+                    continue
+                result += bytes([option, len(value)]) + value
         result += bytes([255])
         return bytes(result)
 
@@ -92,11 +93,12 @@ class WriteBootProtocolPacket(object):
     def options(self):
         done = list()
         # fulfill wishes
-        for option in self.parameter_order:
-            if option < len(options) and hasattr(self, options[option][0]) or hasattr(self, 'option_{}'.format(option)):
-                # this may break with the specification because we must try to fulfill the wishes
-                if option not in done:
-                    done.append(option)
+        if self.parameter_order:
+            for option in self.parameter_order:
+                if option < len(options) and hasattr(self, options[option][0]) or hasattr(self, 'option_{}'.format(option)):
+                    # this may break with the specification because we must try to fulfill the wishes
+                    if option not in done:
+                        done.append(option)
         # add my stuff
         for option, o in enumerate(options):
             if o[0] and hasattr(self, o[0]):
@@ -466,6 +468,7 @@ class DHCPServer(object):
         mac_address = packet.client_mac_address
         requested_ip_address = packet.requested_ip_address
         known_hosts = self.hosts.get(mac = CASEINSENSITIVE(mac_address))
+        assigned_addresses = set(host.ip for host in self.hosts.get())
         ip = None
         if known_hosts:
             # 1. choose known ip address
@@ -473,7 +476,7 @@ class DHCPServer(object):
                 if self.is_valid_client_address(host.ip):
                     ip = host.ip
             print('known ip:', ip)
-        if ip is None and self.is_valid_client_address(requested_ip_address):
+        if ip is None and self.is_valid_client_address(requested_ip_address) and ip not in assigned_addresses:
             # 2. choose valid requested ip address
             ip = requested_ip_address
             print('valid ip:', ip)
