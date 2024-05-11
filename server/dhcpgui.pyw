@@ -14,6 +14,21 @@ HERE = os.path.dirname(sys.argv[0])
 
 root = Tk()
 root.title('MAC, IP & Computer')
+
+# Vertical (y) Scroll Bar
+scroll = Scrollbar(root)
+scroll.pack(side=RIGHT, fill=Y)
+
+# Text Widget
+eula = Text(root, wrap=NONE, yscrollcommand=scroll.set)
+eula.insert("1.0", "text")
+eula.pack(side="left")
+
+# Configure the scrollbars
+scroll.config(command=eula.yview)
+mainloop()
+
+
 info_text = Text(root, height = 12, width = 80)
 info_text.pack(fill = BOTH, expand = True)
 
