@@ -15,22 +15,24 @@ HERE = os.path.dirname(sys.argv[0])
 root = Tk()
 root.title('MAC, IP & Computer')
 
+# Horizontal (x) Scroll bar
+xscrollbar = Scrollbar(root, orient=HORIZONTAL)
+xscrollbar.pack(side=BOTTOM, fill=X)
+
 # Vertical (y) Scroll Bar
-scroll = Scrollbar(root)
-scroll.pack(side=RIGHT, fill=Y)
+yscrollbar = Scrollbar(root)
+yscrollbar.pack(side=RIGHT, fill=Y)
 
 # Text Widget
-eula = Text(root, wrap=NONE, yscrollcommand=scroll.set)
-eula.insert("1.0", "text")
-eula.pack(side="left")
+info_text = Text(root, wrap=NONE,
+            xscrollcommand=xscrollbar.set,
+                 yscrollcommand=yscrollbar.set)
+info_text.insert("1.0", "text")
+info_text.pack(side="left")
 
 # Configure the scrollbars
-scroll.config(command=eula.yview)
-mainloop()
-
-
-info_text = Text(root, height = 12, width = 80)
-info_text.pack(fill = BOTH, expand = True)
+xscrollbar.config(command=info_text.xview)
+yscrollbar.config(command=info_text.yview)
 
 configuration = DHCPServerConfiguration()
 configuration.debug = print
