@@ -54,6 +54,32 @@ This program was created to find Raspberry Pis in the network.
 - [Adafruit-Pi-Finder](https://github.com/adafruit/Adafruit-Pi-Finder) - finde deinen Raspberry Pi im Netzwerk
 - [Angry IP](https://angryip.org/) (Windows)
 
+Changelog
+---------
+
+- 0.7
+    - Prevent duplicate assignment of IP addresses
+    - Add sliders to the GUI
+- 0.6
+    - Use a queue
+    - Run in Linux
+    - Add install description
+    - Add ability to bind to a fixed IP address
+- 0.5
+    - Fix issue with delay worker
+- 0.4
+    - Fix issue with delay worker
+    - Add license
+- 0.3
+    - Also show old values
+    - Random IP assignment when address space is full
+- 0.2
+    - Add .exe file
+    - Add width and height
+- 0.1
+    - Mark new entries as yellow
+    - Initial release
+
 New Releases
 ------------
 
