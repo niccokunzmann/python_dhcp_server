@@ -101,11 +101,12 @@ When the source code is changed, create a new release.
     ```
 3. Download the [latest release](https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.5/python_dhcp_server_standalone_0.5.zip).
     ```
-    cd Downloads
-    wget 'https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.5/python_dhcp_server_standalone_0.5.zip'
+    cd ~/Downloads
+    wget -c 'https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.5/python_dhcp_server_standalone_0.5.zip'
     ```
 4. Unzip it.
     ```
+    rm -rf python_dhcp_server_standalone
     unzip python_dhcp_server_standalone_0.5.zip
     ```
 5. Replace the `server` directory.
@@ -117,6 +118,7 @@ When the source code is changed, create a new release.
     ```
 6. Zip the release.
     ```
+    cd ..
     zip -9r python_dhcp_server_standalone_0.6.zip python_dhcp_server_standalone
     ```
 7. Upload the zip file to the [pushed release][releases].
