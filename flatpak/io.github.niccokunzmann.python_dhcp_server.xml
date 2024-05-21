@@ -64,7 +64,7 @@
   <launchable type="desktop-id">io.github.niccokunzmann.python_dhcp_server.desktop</launchable>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/niccokunzmann/python_dhcp_server/92c3a9cd67271d0b704ec9013099a9c087829306/images/xubuntu.png</image>
+      <image>https://raw.githubusercontent.com/niccokunzmann/python_dhcp_server/a88381a9f84d194b4efe789cf82967832bd19231/images/xubuntu.png</image>
       <caption>Python DHCP Server</caption>
     </screenshot>
   </screenshots>
