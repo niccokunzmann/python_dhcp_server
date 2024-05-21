@@ -14,8 +14,25 @@ HERE = os.path.dirname(sys.argv[0])
 
 root = Tk()
 root.title('MAC, IP & Computer')
-info_text = Text(root, height = 12, width = 80)
-info_text.pack(fill = BOTH, expand = True)
+
+# Horizontal (x) Scroll bar
+xscrollbar = Scrollbar(root, orient=HORIZONTAL)
+xscrollbar.pack(side=BOTTOM, fill=X)
+
+# Vertical (y) Scroll Bar
+yscrollbar = Scrollbar(root)
+yscrollbar.pack(side=RIGHT, fill=Y)
+
+# Text Widget
+info_text = Text(root, wrap=NONE,
+            xscrollcommand=xscrollbar.set,
+                 yscrollcommand=yscrollbar.set)
+info_text.insert("1.0", "text")
+info_text.pack(side="left")
+
+# Configure the scrollbars
+xscrollbar.config(command=info_text.xview)
+yscrollbar.config(command=info_text.yview)
 
 configuration = DHCPServerConfiguration()
 configuration.debug = print
