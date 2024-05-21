@@ -1,5 +1,6 @@
 
 // based on https://msdn.microsoft.com/en-us/library/ms682425%28VS.85%29.aspx
+// can be compiled with https://bloodshed.net/ DevC++ 5
 
 #include <windows.h>
 #include <stdio.h>

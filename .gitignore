@@ -50,3 +50,4 @@ __pycache__
 hosts.csv
 
 *.swp
+.vscode/tasks.json

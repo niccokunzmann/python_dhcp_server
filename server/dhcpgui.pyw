@@ -17,7 +17,10 @@ root = Tk()
 root.title('MAC, IP & Computer')
 # use the icon
 # see https://stackoverflow.com/a/75579809
-root.iconphoto(False, PhotoImage(file=os.path.join(HERE, "icon.png")))
+try:
+    root.iconphoto(False, PhotoImage(file=os.path.join(HERE, "icon.png")))
+except AttributeError:
+    root.iconbitmap(os.path.join(HERE, "icon.ico"))
 
 # Horizontal (x) Scroll bar
 xscrollbar = Scrollbar(root, orient=HORIZONTAL)
