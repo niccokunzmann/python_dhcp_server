@@ -58,7 +58,7 @@ Changelog
 ---------
 
 - 0.8
-    - Make test field expandable
+    - Make text field expandable
     - Show error message if DHCP port cannot be accessed
 - 0.7
     - Prevent duplicate assignment of IP addresses
