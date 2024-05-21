@@ -84,32 +84,39 @@ New Releases
 ------------
 
 When the source code is changed, create a new release.
-1. Create a new tag
+
+1. Log the changes, edit the Changelog Section.
+    ```
+    git log # find changes
+    git add README.md
+    git commit -m"log changes"
+    ```
+2. Create a new tag
     ```
     git tag 0.6
     git push origin 0.6
     ```
-2. Download the [latest release](https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.5/python_dhcp_server_standalone_0.5.zip).
+3. Download the [latest release](https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.5/python_dhcp_server_standalone_0.5.zip).
     ```
     cd Downloads
     wget 'https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.5/python_dhcp_server_standalone_0.5.zip'
     ```
-3. Unzip it.
+4. Unzip it.
     ```
     unzip python_dhcp_server_standalone_0.5.zip
     ```
-4. Replace the `server` directory.
+5. Replace the `server` directory.
     ```
     cd python_dhcp_server_standalone
     rm -r server
     cp -r ~/python_dhcp_server/server/ .
     rm -r server/__pycache__
     ```
-5. Zip the release.
+6. Zip the release.
     ```
     zip -9r python_dhcp_server_standalone_0.6.zip python_dhcp_server_standalone
     ```
-6. Upload the zip file to the [pushed release][releases].
+7. Upload the zip file to the [pushed release][releases].
 
 
 [releases]: https://github.com/niccokunzmann/python_dhcp_server/releases
