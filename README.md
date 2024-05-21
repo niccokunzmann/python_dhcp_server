@@ -122,6 +122,8 @@ When the source code is changed, create a new release.
     zip -9r python_dhcp_server_standalone_0.6.zip python_dhcp_server_standalone
     ```
 7. Upload the zip file to the [pushed release][releases].
+8. Head over to [the Flathub metadata](https://github.com/niccokunzmann/io.github.niccokunzmann.python_dhcp_server/)
+   and create a new release.
 
 
 [releases]: https://github.com/niccokunzmann/python_dhcp_server/releases
