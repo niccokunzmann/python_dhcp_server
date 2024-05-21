@@ -2,6 +2,7 @@
 from dhcp import *
 try:
     from tkinter import *
+    from tkinter.messagebox import showerror
 except ImportError:
     print("Install tkinter!")
     print("    sudo apt-get install python3-tk")
@@ -24,11 +25,10 @@ yscrollbar = Scrollbar(root)
 yscrollbar.pack(side=RIGHT, fill=Y)
 
 # Text Widget
-info_text = Text(root, wrap=NONE,
-            xscrollcommand=xscrollbar.set,
+info_text = Text(root, wrap=NONE, height=12, width=80,
+                 xscrollcommand=xscrollbar.set,
                  yscrollcommand=yscrollbar.set)
-info_text.insert("1.0", "text")
-info_text.pack(side="left")
+info_text.pack(fill=BOTH, expand = True)
 
 # Configure the scrollbars
 xscrollbar.config(command=info_text.xview)
@@ -38,7 +38,11 @@ configuration = DHCPServerConfiguration()
 configuration.debug = print
 #configuration.adjust_if_this_computer_is_a_router()
 configuration.load(os.path.join(HERE, 'dhcpgui.conf'))
-server = DHCPServer(configuration)
+try:
+    server = DHCPServer(configuration)
+except PermissionError:
+    showerror("No access to DHCP port", "The network port cannot be accessed. Run this program with sudo.")
+    exit(1)
 server.run_in_thread()
 
 # create pretty tags
