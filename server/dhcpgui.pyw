@@ -15,7 +15,9 @@ HERE = os.path.dirname(sys.argv[0])
 
 root = Tk()
 root.title('MAC, IP & Computer')
-root.iconphoto(False, PhotoImage(file=os.path.join(HERE, "..", "images", "icons", "icon-64.png")))
+# use the icon
+# see https://stackoverflow.com/a/75579809
+root.iconphoto(False, PhotoImage(file=os.path.join(HERE, "icon.png")))
 
 # Horizontal (x) Scroll bar
 xscrollbar = Scrollbar(root, orient=HORIZONTAL)
