@@ -57,6 +57,9 @@ This program was created to find Raspberry Pis in the network.
 Changelog
 ---------
 
+- 0.9
+    - Add icon to exe file and application
+    - Add flatpak build information
 - 0.8
     - Make text field expandable
     - Show error message if DHCP port cannot be accessed
@@ -88,7 +91,9 @@ New Releases
 
 When the source code is changed, create a new release.
 
-1. Log the changes, edit the Changelog Section.
+1. Log the changes: Edit the Changelog Section in
+    - `README.md`
+    - `python_dhcp_server/flatpak/io.github.niccokunzmann.python_dhcp_server.xml`
     ```
     git log # find changes
     git add README.md
@@ -96,18 +101,18 @@ When the source code is changed, create a new release.
     ```
 2. Create a new tag
     ```
-    git tag 0.6
-    git push origin 0.6
+    git tag 0.10
+    git push origin 0.10
     ```
-3. Download the [latest release](https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.5/python_dhcp_server_standalone_0.5.zip).
+3. Download the [latest release](https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.9/python_dhcp_server_standalone_0.9.zip).
     ```
     cd ~/Downloads
-    wget -c 'https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.5/python_dhcp_server_standalone_0.5.zip'
+    wget -c 'https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.9/python_dhcp_server_standalone_0.9.zip'
     ```
 4. Unzip it.
     ```
     rm -rf python_dhcp_server_standalone
-    unzip python_dhcp_server_standalone_0.5.zip
+    unzip python_dhcp_server_standalone_0.9.zip
     ```
 5. Replace the `server` directory.
     ```
@@ -119,7 +124,7 @@ When the source code is changed, create a new release.
 6. Zip the release.
     ```
     cd ..
-    zip -9r python_dhcp_server_standalone_0.6.zip python_dhcp_server_standalone
+    zip -9r python_dhcp_server_standalone_0.10.zip python_dhcp_server_standalone
     ```
 7. Upload the zip file to the [pushed release][releases].
 8. Head over to [the Flathub metadata](https://github.com/niccokunzmann/io.github.niccokunzmann.python_dhcp_server/)
