@@ -44,11 +44,11 @@ qt = [
 ]
 
 [project.scripts]
-python-dhcp-server = "simple_dhcp_server:main"
-python-dhcp-server-tk = "simple_dhcp_server.tk:main"
-python-dhcp-server-qt = "simple_dhcp_server.qt:main"
-python-dhcp-server-serve = "simple_dhcp_server.dhcp:main"
-python-dhcp-server-listen = "simple_dhcp_server.listener:main"
+simple-dhcp-server = "simple_dhcp_server:main"
+simple-dhcp-server-tk = "simple_dhcp_server.tk:main"
+simple-dhcp-server-qt = "simple_dhcp_server.qt:main"
+simple-dhcp-server-serve = "simple_dhcp_server.dhcp:main"
+simple-dhcp-server-listen = "simple_dhcp_server.listener:main"
 
 
 [tool.hatch.metadata.hooks.vcs.urls]
