@@ -50,7 +50,7 @@ jobs:
   deploy-tag-to-pypi:
     name: Publish Package on PyPI
     # only deploy on tags, see https://stackoverflow.com/a/58478262/1320237
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
     needs:
     - run-tests
     runs-on: ubuntu-latest
@@ -100,7 +100,7 @@ jobs:
   github-release:
     name: "Publish GitHub Release"
     # only deploy on tags, see https://stackoverflow.com/a/58478262/1320237
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
     needs:
       - run-tests
       - deploy-tag-to-pypi
