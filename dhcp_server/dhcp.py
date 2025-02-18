@@ -7,8 +7,6 @@ import collections
 import traceback
 import socket
 
-import yaml
-
 from .listener import *
 
 def get_host_ip_addresses():
@@ -246,8 +244,9 @@ class DHCPServerConfiguration(object):
             
     def load_yaml(self, file:str):
         """Load a yaml file."""
+        import yaml
         with open(file) as f:
-            self.__dict__.update(yaml)
+            self.__dict__.update(yaml.safe_load(f))
         
 
     def adjust_if_this_computer_is_a_router(self):
