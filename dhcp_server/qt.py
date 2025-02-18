@@ -41,8 +41,6 @@ class HostsTableWidget(QTableWidget):
  
     def updateHosts(self, hosts:list[Host]): 
         time_sorted_hosts = list(reversed(sorted(hosts, key = lambda host: host.last_used)))
-        if self.last_hosts == time_sorted_hosts:
-            return
         self.last_hosts = time_sorted_hosts
 
         style = ""
