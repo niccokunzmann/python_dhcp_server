@@ -59,6 +59,10 @@ These are the recent changes.
 If a version is not released, yet, it can still show up.
 You can view the [realeases on GitHub][releases].
 
+### 1.0.1
+
+- Correct path for Windows release zip
+
 ### 1.0.0
 
 - Add QT Release
