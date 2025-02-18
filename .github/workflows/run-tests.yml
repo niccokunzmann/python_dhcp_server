@@ -19,8 +19,13 @@ jobs:
     strategy:
         # see https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs#expanding-or-adding-matrix-configurations
         matrix:
-          python: ["3.12"]
-          tox_env: ["build"]
+          config:
+            - python: 3.12
+              tox_env: build
+              platform: ubuntu-latest
+            - python: 3.12
+              tox_env: exe
+              platform: windows-latest
     name: "Build & Run Tests"
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +39,14 @@ jobs:
       - name: Run tests
         # Run tox using the version of Python in `PATH`
         run: tox -e ${{ matrix.tox_env }}
-        
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.config.tox_env }}-${{ matrix.config.platform }}  # dist-exe-windows-latest
+          path: dist
+          if-no-files-found: ignore
+          retention-days: 1
+          compression-level: 0
+  
   deploy-tag-to-pypi:
     name: Publish Package on PyPI
     # only deploy on tags, see https://stackoverflow.com/a/58478262/1320237
@@ -101,3 +113,4 @@ jobs:
           allowUpdates: true
           body: "For a list of changes, please refer to the [Changelog](https://github.com/niccokunzmann/python_dhcp_server?tab=readme-ov-file#changelog)."
           generateReleaseNotes: false
+          artifacts: "dist/dist-exe-windows-latest/ics-query.exe"
