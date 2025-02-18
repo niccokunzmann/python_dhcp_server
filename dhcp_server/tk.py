@@ -53,7 +53,7 @@ def main():
         with open(THIS_CONFIG, "w") as f:
             with open(config_file) as s:
                 f.write(s.read())
-        print("Created config file:", THIS_CONFIG)
+        print("Created config file:", config_file)
     configuration.load(THIS_CONFIG)
     try:
         server = DHCPServer(configuration)

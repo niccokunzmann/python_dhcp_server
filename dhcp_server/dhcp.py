@@ -378,7 +378,9 @@ class Host(object):
 
     def has_valid_ip(self):
         return self.ip and self.ip != '0.0.0.0'
-        
+    
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.mac!r}, {self.ip!r}, {self.hostname!r}, {self.last_used!r})"
 
 class HostDatabase(object):
     def __init__(self, file_name):

@@ -1,18 +1,67 @@
 """Run the Python DHCP server with QT."""
 import os
-from PySide6.QtWidgets import QApplication, QTextEdit, QMainWindow, QErrorMessage
-from PySide6.QtGui import QIcon, QFont
+import signal
+from PySide6.QtWidgets import QApplication, QTextEdit, QMainWindow, QErrorMessage, QTableWidget, QTableWidgetItem
+from PySide6.QtGui import QIcon, QFont, QBrush, QColor
 from PySide6.QtCore import QTimer
 
 # Only needed for access to command line arguments
 import sys
 
-from dhcp_server.dhcp import DHCPServer, DHCPServerConfiguration
+from dhcp_server.dhcp import DHCPServer, DHCPServerConfiguration, Host
 
 HERE = os.path.dirname(__file__)
 ICON = os.path.join(HERE, "icon.ico")
 
 THIS_CONFIG = 'python-dhcp-server-qt.yml'
+
+
+class HostsTableWidget(QTableWidget):
+    def __init__(self, *args):
+        QTableWidget.__init__(self, 3, 1, *args)
+        self.setColumnCount(3)
+        self.last_hosts : list[Host] = []
+        
+    def bgColor(self, host:Host) -> str:
+        """Return the background color for the host."""
+        if self.last_hosts is None:
+            return "#ffffff"
+        try:
+            index = self.last_hosts.index(host)
+        except IndexError:
+            return "#ffffff"
+        s = "024579bdf"
+        if index >= len(s): return "#ffffff"
+        c = s[index]
+        color = f"#ffff{c}{c}"
+        return color
+    
+    def bgBrush(self, host:Host) -> QBrush:
+        return QBrush(QColor(self.bgColor(host)))
+ 
+    def updateHosts(self, hosts:list[Host]): 
+        time_sorted_hosts = list(reversed(sorted(hosts, key = lambda host: host.last_used)))
+        if self.last_hosts == time_sorted_hosts:
+            return
+        self.last_hosts = time_sorted_hosts
+
+        style = ""
+        for i, host in enumerate(hosts):
+            self.insertRow(i)
+            self.setItem(i, 0, self.get_item(host, host.mac))
+            self.setItem(i, 1, self.get_item(host, host.ip))
+            self.setItem(i, 2, self.get_item(host, host.hostname))
+        self.setHorizontalHeaderLabels(["MAC", "IP", "HOST"])
+        self.resizeColumnsToContents()
+        self.resizeRowsToContents()
+        self.setRowCount(len(hosts))
+        self.setStyleSheet(style)
+        
+    def get_item(self, host: Host, text: str) -> QTableWidgetItem:
+        brush = self.bgBrush(host)
+        item = QTableWidgetItem(text)
+        item.setBackground(brush)
+        return item
 
 
 def main():
@@ -29,7 +78,7 @@ def main():
         with open(THIS_CONFIG, "w") as f:
             with open(config_file) as s:
                 f.write(s.read())
-        print("Created config file:", THIS_CONFIG)
+        print("Created config file:", config_file)
     configuration.load_yaml(THIS_CONFIG)
     try:
         server = DHCPServer(configuration)
@@ -50,47 +99,33 @@ def main():
     # see https://stackoverflow.com/a/1835938
     font = QFont("Monospace")
     font.setStyleHint(QFont.Monospace)
-    info_text = QTextEdit()
-    info_text.setFont(font)
-    info_text.setMinimumWidth(460)
-    info_text.setMinimumHeight(60)
-    window.setCentralWidget(info_text)
-
-    # create pretty tags
-    time_tags = []
-    for i, yellow in enumerate("0123456789abcdef"):
-        tag = 'yellow_{}'.format(i)
-        bg = '#ffff{}{}'.format(yellow, yellow)
-        time_tags.append(tag)
+    info = HostsTableWidget()
+    # info.setFont(font)
+    info.setMinimumWidth(460)
+    info.setMinimumHeight(60)
+    window.setCentralWidget(info)
 
 
     last_time_sorted_hosts = None
     def update_text():
         nonlocal last_time_sorted_hosts
-        # root.after(100, update_text)
         hosts = server.get_all_hosts()
-        current_hosts = server.get_current_hosts()
-        time_sorted_hosts = list(reversed(sorted(hosts, key = lambda host: host.last_used)))
-        if last_time_sorted_hosts != time_sorted_hosts:
-            text = 'MAC'.center(17) + '  ' + 'IP'.center(15) + '  ' + '  HOST' + '\n'
-            headerlines = 1
-            for host in hosts:
-                text += f'{host.mac}  {host.ip.ljust(15, " ")}  {host.hostname}<br/>'
-            info_text.setHtml(text)
-            # prettify the text
-                # if host in current_hosts:
-                #     tag_index = int(time_i / len(current_hosts) * len(time_tags))
-                #     info_text.tag_add(time_tags[tag_index], start, stop)
-                # else:
-                #     info_text.tag_add(old_tag, start, stop)
-            # info_text.tag_raise("sel")
-        last_time_sorted_hosts = time_sorted_hosts
+        info.updateHosts(hosts)
+        info.adjustSize()
+        window.adjustSize()
+
+    # quit on KeyboardInterrupt
+    # see https://stackoverflow.com/a/4939113
+    signal.signal(signal.SIGINT, lambda *args: app.quit())
 
     # see https://stackoverflow.com/a/59094300
     timer = QTimer()
     timer.timeout.connect(update_text)
     timer.setInterval(100)
     timer.start()
+    
+    info.show()
+    update_text()
 
     app.exec()
     server.close()
