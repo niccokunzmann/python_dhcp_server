@@ -19,7 +19,7 @@ jobs:
     strategy:
         # see https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs#expanding-or-adding-matrix-configurations
         matrix:
-          config:
+          include:
             - python: 3.12
               tox_env: build
               platform: ubuntu-latest
