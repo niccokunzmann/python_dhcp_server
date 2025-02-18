@@ -1,4 +1,4 @@
-Python DHCP Server
+Simple DHCP Server
 ------------------
 
 [Download][releases]
