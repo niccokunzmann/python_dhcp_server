@@ -41,7 +41,7 @@ jobs:
         run: tox -e ${{ matrix.tox_env }}
       - uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.config.tox_env }}-${{ matrix.config.platform }}  # dist-exe-windows-latest
+          name: dist-${{ matrix.tox_env }}-${{ matrix.platform }}  # dist-exe-windows-latest
           path: dist
           if-no-files-found: ignore
           retention-days: 1
