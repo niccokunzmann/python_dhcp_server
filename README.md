@@ -24,12 +24,26 @@ Contributions welcome!
 
 ## Windows
 
-You can install this software by downloading the [release][releases] named ` Simple-DHCP-Server-Windows-X.Y.Z.zip` file.
+You can install this software by downloading the [release][releases] named `Simple-DHCP-Server-Windows-X.Y.Z.zip` file.
 Unpack the zip file, you will find an executable `.exe` file inside.
 
 ## Linux
 
 There are several ways to install this under Linux:
+
+### QT
+
+You can use the new QT GUI:
+
+```sh
+pip install simple-dhcp-server[qt]
+```
+
+Start:
+
+```sh
+sudo simple-dhcp-server-qt
+```
 
 ### Tkinter
 
@@ -37,8 +51,27 @@ You can use the old Tkinter GUI:
 
 ```sh
 sudo apt-get install python3 python3-tk
-pipx install simple-dhcp-server
+pip install simple-dhcp-server
 ```
+
+Start:
+
+```sh
+sudo simple-dhcp-server-tk
+```
+
+## Pipx
+
+Pipx makes installation even nicer because it isolated the app.
+
+1. Install [pipx]
+2. Start:
+
+    ```sh
+    sudo pipx run --spec simple-dhcp-server[qt] python-dhcp-server-qt   
+    ```
+
+[pipx]: https://pipx.pypa.io/stable/installation/
 
 ## Related Work
 
