@@ -21,6 +21,7 @@ This Python DHCP server
 - can be configured to serve all DHCP options using Python
 
 Contributions welcome!
+If you find a bug, please open an [issue].
 
 ## Windows
 
@@ -150,51 +151,30 @@ You can view the [realeases on GitHub][releases].
 - Mark new entries as yellow
 - Initial release
 
-New Releases
-------------
+## New Releases
 
 When the source code is changed, create a new release.
 
 1. Log the changes: Edit the Changelog Section in
+
     - `README.md`
     - `python_dhcp_server/flatpak/io.github.niccokunzmann.python_dhcp_server.xml`
-    ```
+
+    ```sh
     git log # find changes
     git add README.md
     git commit -m"log changes"
     ```
+
 2. Create a new tag
+
+    ```sh
+    git tag 1.0.3
+    git push origin 1.0.3
     ```
-    git tag 0.10
-    git push origin 0.10
-    ```
-3. Download the [latest release](https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.9/python_dhcp_server_standalone_0.9.zip).
-    ```
-    cd ~/Downloads
-    wget -c 'https://github.com/niccokunzmann/python_dhcp_server/releases/download/0.9/python_dhcp_server_standalone_0.9.zip'
-    ```
-4. Unzip it.
-    ```
-    rm -rf python_dhcp_server_standalone
-    unzip python_dhcp_server_standalone_0.9.zip
-    ```
-5. Replace the `server` directory.
-    ```
-    cd python_dhcp_server_standalone
-    rm -r server
-    cp -r ~/python_dhcp_server/server/ .
-    rm -r server/__pycache__
-    ```
-6. Zip the release.
-    ```
-    cd ..
-    zip -9r python_dhcp_server_standalone_0.10.zip python_dhcp_server_standalone
-    ```
-7. Upload the zip file to the [pushed release][releases].
-8. Head over to [the Flathub metadata](https://github.com/niccokunzmann/io.github.niccokunzmann.python_dhcp_server/)
+
+3. Head over to [the Flathub metadata](https://github.com/niccokunzmann/io.github.niccokunzmann.python_dhcp_server/)
    and create a new release.
 
-
 [releases]: https://github.com/niccokunzmann/python_dhcp_server/releases
-[zip]: https://github.com/niccokunzmann/python_dhcp_server/archive/refs/heads/master.zip
-[issues]: https://github.com/niccokunzmann/python_dhcp_server/issues
+[issue]: https://github.com/niccokunzmann/python_dhcp_server/issues
