@@ -117,7 +117,11 @@ jobs:
           mkdir -p dist/release
           cp dist/dist-build-ubuntu-latest/* dist/release
       - name: Create Windows Release Zip
-        run: zip -r "dist/release/Simple-DHCP-Server-Windows-${{github.ref_name}}.zip" dist/dist-exe-windows-latest/*
+        run: |
+          (
+            cd dist/dist-exe-windows-latest/simple-dhcp-server-windows
+            zip -r "../../release/Simple-DHCP-Server-Windows-${{github.ref_name}}.zip" *
+          )
       - name: create release
         uses: ncipollo/release-action@v1.15.0
         with:
