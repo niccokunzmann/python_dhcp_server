@@ -1,0 +1,88 @@
+# This config file is Python code.
+# It is executed when starting dhcpgui.pyw.
+# Most important configuration comes first.
+
+########### Timings ###########
+# Set the time the DHCP server waits in seconds.
+dhcp_offer_after_seconds: 10
+dhcp_acknowledge_after_seconds: 10
+
+# This is the time in seconds after which the DHCP-
+#   server forgets that it communicates with a client
+length_of_transaction: 40
+
+########### Network ###########
+# This is the network address
+network: '192.168.137.0'
+
+# This is the subnet mask
+subnet_mask: '255.255.255.0'
+
+# Currently there is no range configuration.
+# Assigned IP addresses will range from 5 to 250.
+
+# This is the address of the router.
+# router: None # Do not tell clients about routers.
+# router: []   # Tell clients there is no router.
+# router: ['192.168.137.1'] # 192.168.137.1 is a router.
+router: null
+
+# This are the addresses of the DNS-server.
+# domain_name_server: null # Do not tell clients about DNS-Servers.
+# domain_name_server: []   # Tell clients there is no DNS-server.
+# domain_name_server: ['192.168.137.1'] # 192.168.137.1 is a DNS-Server.
+domain_name_server: null # list of ips
+
+# This is the time in seconds after which the client
+#   should have asked for a new IP address.
+# 1 day is 86400 seconds.
+ip_address_lease_time: 300
+
+# This is the broadcast address
+# If the network is 192.168.137.0 
+#   the broadcast address could also be 192.168.137.255
+broadcast_address: '255.255.255.255'
+
+# Listen to DHCP requests on this interface
+# bind_address: '192.168.137.10'  # Listen for requests on this specific interface
+bind_address: ''                 # Listen for requests on all interfaces
+
+########### Memory ###########
+# This is the path to a file to the DHCP-servers memory.
+# MAC, IP and host name will be stored there 
+#   in CSV format.
+# You can delete the file and the DHCP-server will 
+#   assign different IP-addresses.
+# It also contains the entries not issued by the DHCP-server.
+host_file: 'hosts.csv'
+
+########### Options ###########
+# You can set all options that a DHCP-server can serve.
+# There are 253 of them.
+# See the RFC 2132 for a list of options:
+#   https://tools.ietf.org/html/rfc2132
+# How do you set options:
+#
+# 1. You can set options by name.
+#     You can find the name in listener.py.
+#     Example: subnet_mask
+#     
+# 2. You can set options by number.
+#     You can find the number in the RFC 2132.
+#     Named options are preferred over unnamed options.
+#     Example: option_1
+#     Option 1 is the subnet mask.
+#     Because subnet_mask: '255.255.255.0' is in this
+#       file, the option_1: '255.255.255.0' statement
+#       is ignored.
+#
+# If you see "3.17. Domain Name" you can use 
+#   "Domain Name".lower().replace(" ", "_") 
+#   to convert it to the variable name.
+#
+# Some options do not have conversion functions
+#   assigned to them so you need to use bytes.
+# Example: domain_name: b'hello.kitty.tv'
+# Again, see listener.py
+
+

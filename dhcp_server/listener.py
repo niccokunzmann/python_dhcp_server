@@ -245,9 +245,11 @@ assert p.router == ['192.168.0.1']
 assert p.domain_name_server == ['192.168.0.1']
 str(p)
 
-if __name__ == '__main__':
+
+def main():
+    """Listen to DHCP traffic on the network."""
     s1 = socket(type = SOCK_DGRAM)
-    s1.setsockopt(SOL_IP, SO_REUSEADDR, 1)
+    s1.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     s1.bind(('', 67))
     #s2 = socket(type = SOCK_DGRAM)
     #s2.setsockopt(SOL_IP, SO_REUSEADDR, 1)
@@ -257,3 +259,6 @@ if __name__ == '__main__':
         for s in reads:
             packet = ReadBootProtocolPacket(*s.recvfrom(4096))
             print(packet)
+
+if __name__ == '__main__':
+    main()

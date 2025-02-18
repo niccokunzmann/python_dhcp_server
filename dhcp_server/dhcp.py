@@ -9,7 +9,7 @@ import socket
 
 import yaml
 
-from listener import *
+from .listener import *
 
 def get_host_ip_addresses():
     return gethostbyname_ex(gethostname())[2]
@@ -551,7 +551,8 @@ class DHCPServer(object):
     def get_current_hosts(self):
         return sorted_hosts(self.hosts.get(last_used = GREATER(self.time_started)))
 
-if __name__ == '__main__':
+def main():
+    """Run a DHCP server from the command line."""
     configuration = DHCPServerConfiguration()
     configuration.debug = print
     configuration.adjust_if_this_computer_is_a_router()
@@ -561,3 +562,6 @@ if __name__ == '__main__':
     for ip in server.configuration.all_ip_addresses():
         assert ip == server.configuration.network_filter()
     server.run()
+
+if __name__ == '__main__':
+    main()

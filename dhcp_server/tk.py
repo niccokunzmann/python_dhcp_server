@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from dhcp import *
+from .dhcp import *
 try:
     from tkinter import *
     from tkinter.messagebox import showerror
@@ -75,7 +75,7 @@ def main():
 
     last_time_sorted_hosts = None
     def update_text():
-        global last_time_sorted_hosts
+        nonlocal last_time_sorted_hosts
         root.after(100, update_text)
         hosts = server.get_all_hosts()
         current_hosts = server.get_current_hosts()
