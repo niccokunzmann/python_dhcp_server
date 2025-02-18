@@ -1,0 +1,103 @@
+# SPDX-FileCopyrightText: 2024 2024 Nicco Kunzmann and Open Web Calendar Contributors <https://open-web-calendar.quelltext.eu/>
+#
+# SPDX-License-Identifier: GPL-2.0-only
+
+# Run pytest for each commit.
+# See also
+#    https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#running-tests-with-tox
+name: "Build, Test & Publish"
+
+on: [push, pull_request]
+
+# cancel builds in progress if a new push has been made to the same ref
+# see https://stackoverflow.com/a/70972844/1320237
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  run-tests:
+    strategy:
+        # see https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs#expanding-or-adding-matrix-configurations
+        matrix:
+          python: ["3.12"]
+          tox_env: ["build"]
+    name: "Build & Run Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install tox
+        run: pip install tox
+      - name: Run tests
+        # Run tox using the version of Python in `PATH`
+        run: tox -e ${{ matrix.tox_env }}
+        
+  deploy-tag-to-pypi:
+    name: Publish Package on PyPI
+    # only deploy on tags, see https://stackoverflow.com/a/58478262/1320237
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    needs:
+    - run-tests
+    runs-on: ubuntu-latest
+    # This environment stores the TWINE_USERNAME and TWINE_PASSWORD
+    # see https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment
+    environment:
+      name: PyPI
+      url: https://pypi.org/project/open-web-calendar/
+    # after using the environment, we need to make the secrets available
+    # see https://docs.github.com/en/actions/security-guides/encrypted-secrets#example-using-bash
+    env:
+      TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+      TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install --upgrade wheel twine build
+    - name: remove old files
+      run: rm -rf dist/*
+    - name: build distribution files
+      run: python -m build
+    - name: deploy to pypi
+      run: |
+        # You will have to set the variables TWINE_USERNAME and TWINE_PASSWORD
+        # You can use a token specific to your project by setting the user name to
+        # __token__ and the password to the token given to you by the PyPI project.
+        # sources:
+        #   - https://shambu2k.hashnode.dev/gitlab-to-pypi
+        #   - http://blog.octomy.org/2020/11/deploying-python-pacakges-to-pypi-using.html?m=1
+        # Also, set the tags as protected to allow the secrets to be used.
+        # see https://docs.gitlab.com/ee/user/project/protected_tags.html
+        if [ -z "$TWINE_USERNAME" ]; then
+          echo "WARNING: TWINE_USERNAME not set!"
+        fi
+        if [ -z "$TWINE_PASSWORD" ]; then
+          echo "WARNING: TWINE_PASSWORD not set!"
+        fi
+        twine check dist/*
+        twine upload dist/*
+          
+  github-release:
+    name: "Publish GitHub Release"
+    # only deploy on tags, see https://stackoverflow.com/a/58478262/1320237
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    needs:
+      - run-tests
+      - deploy-tag-to-pypi
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: create release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          body: "For a list of changes, please refer to the [Changelog](https://github.com/niccokunzmann/python_dhcp_server?tab=readme-ov-file#changelog)."
+          generateReleaseNotes: false

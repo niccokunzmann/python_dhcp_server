@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "dhcp-server"
+name = "simple-dhcp-server"
 license = {file = "LICENSE"}
 keywords = ["dhcp", "logging", "discover", "LAN", "raspberry-pi"]
 dynamic = ["urls", "version"]
@@ -44,20 +44,20 @@ qt = [
 ]
 
 [project.scripts]
-python-dhcp-server = "dhcp_server:main"
-python-dhcp-server-tk = "dhcp_server.tk:main"
-python-dhcp-server-qt = "dhcp_server.qt:main"
-python-dhcp-server-serve = "dhcp_server.dhcp:main"
-python-dhcp-server-listen = "dhcp_server.listener:main"
+python-dhcp-server = "simple_dhcp_server:main"
+python-dhcp-server-tk = "simple_dhcp_server.tk:main"
+python-dhcp-server-qt = "simple_dhcp_server.qt:main"
+python-dhcp-server-serve = "simple_dhcp_server.dhcp:main"
+python-dhcp-server-listen = "simple_dhcp_server.listener:main"
 
 
 [tool.hatch.metadata.hooks.vcs.urls]
-Homepage = "https://github.com/niccokunzmann/python_dhcp_server"
-Repository = "https://github.com/niccokunzmann/python_dhcp_server/"
-source_archive = "https://github.com/niccokunzmann/python_dhcp_server/archive/{commit_hash}.zip"
-Issues = "https://github.com/niccokunzmann/python_dhcp_server/issues"
-Documentation = "https://github.com/niccokunzmann/python_dhcp_server"
-Changelog = "https://github.com/niccokunzmann/python_dhcp_server?tab=readme-ov-file#changelog"
+Homepage = "https://github.com/niccokunzmann/python_simple_dhcp_server"
+Repository = "https://github.com/niccokunzmann/python_simple_dhcp_server/"
+source_archive = "https://github.com/niccokunzmann/python_simple_dhcp_server/archive/{commit_hash}.zip"
+Issues = "https://github.com/niccokunzmann/python_simple_dhcp_server/issues"
+Documentation = "https://github.com/niccokunzmann/python_simple_dhcp_server"
+Changelog = "https://github.com/niccokunzmann/python_simple_dhcp_server?tab=readme-ov-file#changelog"
 
 [tool.hatch.version]
 source = "vcs"
@@ -67,7 +67,7 @@ source = "vcs"
 local_scheme = "no-local-version"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "dhcp_server/_version.py"
+version-file = "simple_dhcp_server/_version.py"
 
 [tool.hatch.metadata]
 allow-direct-references = true

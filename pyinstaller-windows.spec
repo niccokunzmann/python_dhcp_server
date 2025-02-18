@@ -2,13 +2,13 @@
 
 
 a = Analysis(
-    ['dhcp_server\\qt.py'],
+    ['simple_dhcp_server\\qt.py'],
     pathex=[],
     binaries=[],
     datas=[
-        ('dhcp_server\\icon.ico', '.'),
-        ('dhcp_server\\icon.png', '.'),
-        ('dhcp_server\\python-dhcp-server-qt.yml', '.'),
+        ('simple_dhcp_server\\icon.ico', '.'),
+        ('simple_dhcp_server\\icon.png', '.'),
+        ('simple_dhcp_server\\python-dhcp-server-qt.yml', '.'),
     ],
     hiddenimports=[
         'pyyaml'
@@ -38,7 +38,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon="dhcp_server\\icon.ico"
+    icon="simple_dhcp_server\\icon.ico"
 )
 coll = COLLECT(
     exe,

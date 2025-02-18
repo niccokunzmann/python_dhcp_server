@@ -53,7 +53,7 @@ hosts.csv
 .vscode/tasks.json
 
 .venv
-dhcp_server/_version.py
+simple_dhcp_server/_version.py
 dist
 /python-dhcp-server-qt.yml
 /python-dhcp-server-tk.conf
