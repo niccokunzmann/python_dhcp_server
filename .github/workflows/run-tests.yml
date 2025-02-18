@@ -142,11 +142,11 @@ jobs:
       - name: Create Python Release Files
         run: |
           mkdir -p dist/release
-          cp dist/dist-build-ubuntu-latest/* dist/release
+          cp dist/release-pip/* dist/release
       - name: Create Windows Release Zip
         run: |
           (
-            cd dist/dist-exe-windows-latest/simple-dhcp-server-windows
+            cd dist/release-sign-windows/simple-dhcp-server-windows
             zip -r "../../release/Simple-DHCP-Server-Windows-${{github.ref_name}}.zip" *
           )
       - name: create release
