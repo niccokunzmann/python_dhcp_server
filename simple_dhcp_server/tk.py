@@ -13,7 +13,7 @@ import os
 
 HERE = os.path.dirname(__file__) or "."
 
-THIS_CONFIG = 'python-dhcp-server-tk.conf'
+THIS_CONFIG = 'simple-dhcp-server-tk.conf'
 
 def main():
     """Create a GUI window and the DHCP server from a possible file."""
