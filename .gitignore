@@ -61,3 +61,4 @@ dist
 /simple-dhcp-server-tk.conf
 .tox
 /build
+/windows
