@@ -1,5 +1,4 @@
-Simple DHCP Server
-------------------
+# Simple DHCP Server
 
 [Download][releases]
 
@@ -13,6 +12,7 @@ dhcpgui lists MAC address, IP address and host name.
 This DHCP server program will assign IP addresses ten seconds after it received packets from clients. So it can be used in networks that already have a dhcp server running.
 
 This Python DHCP server
+
 - shows clients in the network
 - lists IP address, Mac address and host name
 - highlights recently refreshed/added clients
@@ -22,69 +22,95 @@ This Python DHCP server
 
 Contributions welcome!
 
-Windows
--------
+## Windows
 
 You can install this software by downloading the [release][releases] named `python_dhcp_server_standalone_X.Y.zip` file.
 Unpack the zip file, you will find an executable `.exe` file inside.
 
-Linux
------
+## Linux
 
 Under Linux you can download the [source code][zip] and install Python 3 and Tkinter for Python 3:
 
-```
+```sh
 sudo apt-get install python3 python3-tk
 ```
 
 There are different ways to start:
+
 1. You can use the `python_dhcp_server.desktop` and double-click it.
     If it does not open, please [report it][issues] and try the next one.
 2. You can run the following command provided you are in the `server`
     directory.
-    ```
+
+    ```sh
     sudo python3 ./dhcpgui.pyw
     ```
 
-Related Work
-------------
+## Related Work
 
 This program was created to find Raspberry Pis in the network.
 
 - [Adafruit-Pi-Finder](https://github.com/adafruit/Adafruit-Pi-Finder) - finde deinen Raspberry Pi im Netzwerk
 - [Angry IP](https://angryip.org/) (Windows)
 
-Changelog
----------
+## Changelog
 
-- 0.9
-    - Add icon to exe file and application
-    - Add flatpak build information
-- 0.8
-    - Make text field expandable
-    - Show error message if DHCP port cannot be accessed
-- 0.7
-    - Prevent duplicate assignment of IP addresses
-    - Add sliders to the GUI
-- 0.6
-    - Use a queue
-    - Run in Linux
-    - Add install description
-    - Add ability to bind to a fixed IP address
-- 0.5
-    - Fix issue with delay worker
-- 0.4
-    - Fix issue with delay worker
-    - Add license
-- 0.3
-    - Also show old values
-    - Random IP assignment when address space is full
-- 0.2
-    - Add .exe file
-    - Add width and height
-- 0.1
-    - Mark new entries as yellow
-    - Initial release
+These are the recent changes.
+If a version is not released, yet, it can still show up.
+You can view the [realeases on GitHub][releases].
+
+### 1.0.0
+
+- Add QT Release
+- Build windows exe automatically
+- Publish to PyPI
+- Create GitHub Release
+
+### 0.9
+
+- Add icon to exe file and application
+- Add flatpak build information
+
+### 0.8
+
+- Make text field expandable
+- Show error message if DHCP port cannot be accessed
+
+### 0.7
+
+- Prevent duplicate assignment of IP addresses
+- Add sliders to the GUI
+
+### 0.6
+
+- Use a queue
+- Run in Linux
+- Add install description
+- Add ability to bind to a fixed IP address
+
+### 0.5
+
+- Fix issue with delay worker
+
+### 0.4
+
+- Fix issue with delay worker
+- Add license
+
+### 0.3
+
+- Also show old values
+- Random IP assignment when address space is full
+
+### 0.2
+
+- Add .exe file
+- Add width and height
+
+### 0.1
+
+- Mark new entries as yellow
+- Initial release
 
 New Releases
 ------------
