@@ -65,6 +65,7 @@ You can view the [realeases on GitHub][releases].
 - Build windows exe automatically
 - Publish to PyPI
 - Create GitHub Release
+- rename `master` branch to `main`
 
 ### 0.9
 
