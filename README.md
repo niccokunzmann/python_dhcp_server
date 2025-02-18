@@ -28,6 +28,10 @@ If you find a bug, please open an [issue].
 You can install this software by downloading the [release][releases] named `Simple-DHCP-Server-Windows-X.Y.Z.zip` file.
 Unpack the zip file, you will find an executable `.exe` file inside.
 
+You might need to unblock the file:
+
+![Properties -> Unblock -> OK](images/unblock.png)
+
 ## Linux
 
 There are several ways to install this under Linux:
