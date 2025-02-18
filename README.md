@@ -24,27 +24,21 @@ Contributions welcome!
 
 ## Windows
 
-You can install this software by downloading the [release][releases] named `python_dhcp_server_standalone_X.Y.zip` file.
+You can install this software by downloading the [release][releases] named ` Simple-DHCP-Server-Windows-X.Y.Z.zip` file.
 Unpack the zip file, you will find an executable `.exe` file inside.
 
 ## Linux
 
-Under Linux you can download the [source code][zip] and install Python 3 and Tkinter for Python 3:
+There are several ways to install this under Linux:
+
+### Tkinter
+
+You can use the old Tkinter GUI:
 
 ```sh
 sudo apt-get install python3 python3-tk
+pipx install simple-dhcp-server
 ```
-
-There are different ways to start:
-
-1. You can use the `python_dhcp_server.desktop` and double-click it.
-    If it does not open, please [report it][issues] and try the next one.
-2. You can run the following command provided you are in the `server`
-    directory.
-
-    ```sh
-    sudo python3 ./dhcpgui.pyw
-    ```
 
 ## Related Work
 
