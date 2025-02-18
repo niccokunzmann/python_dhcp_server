@@ -58,3 +58,4 @@ dist
 /python-dhcp-server-qt.yml
 /python-dhcp-server-tk.conf
 .tox
+/build
