@@ -23,9 +23,11 @@ jobs:
             - python: 3.12
               tox_env: build
               platform: ubuntu-latest
+              artifact: release-pip
             - python: 3.12
               tox_env: exe
               platform: windows-latest
+              artifact: test-windows
     name: "Build & Run Tests"
     runs-on: ${{ matrix.platform }}
     steps:
@@ -41,7 +43,7 @@ jobs:
         run: tox -e ${{ matrix.tox_env }}
       - uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.tox_env }}-${{ matrix.platform }}  # dist-exe-windows-latest
+          name: ${{ matrix.artifact }}
           path: dist
           if-no-files-found: ignore
           retention-days: 1
@@ -100,8 +102,6 @@ jobs:
   sign-windows-release:
     name: Sign Windows Release
     # if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    needs:
-      - run-tests
     runs-on: windows-latest
     environment:
       name: WindowsSigningKey
@@ -109,10 +109,6 @@ jobs:
       SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist-exe-windows-latest
-          path: dist
       - uses: actions/setup-python@v5
         with:
           python-version: 3.12
@@ -122,6 +118,12 @@ jobs:
         run: |
           tox -e exe
           tox -e sign -- $SIGNING_KEY_PASSWORD
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-sign-windows  # dist-exe-windows-latest
+          path: dist
+          retention-days: 1
+          compression-level: 0
   
   github-release:
     name: "Publish GitHub Release"
@@ -136,7 +138,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          pattern: dist-*
+          pattern: release-*
           path: dist
       - run: ls -R dist
       - name: Create Python Release Files
