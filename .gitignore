@@ -57,5 +57,7 @@ simple_dhcp_server/_version.py
 dist
 /python-dhcp-server-qt.yml
 /python-dhcp-server-tk.conf
+/simple-dhcp-server-qt.yml
+/simple-dhcp-server-tk.conf
 .tox
 /build

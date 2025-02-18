@@ -8,7 +8,7 @@ a = Analysis(
     datas=[
         ('simple_dhcp_server\\icon.ico', '.'),
         ('simple_dhcp_server\\icon.png', '.'),
-        ('simple_dhcp_server\\python-dhcp-server-qt.yml', '.'),
+        ('simple_dhcp_server\\simple-dhcp-server-qt.yml', '.'),
     ],
     hiddenimports=[
         'pyyaml'

@@ -70,6 +70,7 @@ You can view the [realeases on GitHub][releases].
 - Publish to PyPI
 - Create GitHub Release
 - rename `master` branch to `main`
+- Renamed to "Simple DHCP Server"
 
 ### 0.9
 

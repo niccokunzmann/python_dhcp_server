@@ -8,12 +8,12 @@ from PySide6.QtCore import QTimer
 # Only needed for access to command line arguments
 import sys
 
-from dhcp_server.dhcp import DHCPServer, DHCPServerConfiguration, Host
+from simple_dhcp_server.dhcp import DHCPServer, DHCPServerConfiguration, Host
 
 HERE = os.path.dirname(__file__)
 ICON = os.path.join(HERE, "icon.ico")
 
-THIS_CONFIG = 'python-dhcp-server-qt.yml'
+THIS_CONFIG = 'simple-dhcp-server-qt.yml'
 
 
 class HostsTableWidget(QTableWidget):
