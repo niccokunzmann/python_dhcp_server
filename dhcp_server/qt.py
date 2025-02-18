@@ -56,6 +56,13 @@ def main():
     info_text.setMinimumHeight(60)
     window.setCentralWidget(info_text)
 
+    # create pretty tags
+    time_tags = []
+    for i, yellow in enumerate("0123456789abcdef"):
+        tag = 'yellow_{}'.format(i)
+        bg = '#ffff{}{}'.format(yellow, yellow)
+        time_tags.append(tag)
+
 
     last_time_sorted_hosts = None
     def update_text():
@@ -68,8 +75,8 @@ def main():
             text = 'MAC'.center(17) + '  ' + 'IP'.center(15) + '  ' + '  HOST' + '\n'
             headerlines = 1
             for host in hosts:
-                text += '{}  {}  {}\n'.format(host.mac, host.ip.ljust(15, ' '), host.hostname)
-            info_text.setText(text)
+                text += f'{host.mac}  {host.ip.ljust(15, " ")}  {host.hostname}<br/>'
+            info_text.setHtml(text)
             # prettify the text
                 # if host in current_hosts:
                 #     tag_index = int(time_i / len(current_hosts) * len(time_tags))
