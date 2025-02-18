@@ -1,6 +1,10 @@
 """Run the Python DHCP server with QT."""
 import os
 import signal
+try:
+    import PySide6
+except ImportError:
+    raise ImportError("Install simple_dhcp_server[qt] and run again.")
 from PySide6.QtWidgets import QApplication, QMainWindow, QErrorMessage, QTableWidget, QTableWidgetItem
 from PySide6.QtGui import QIcon, QFont, QBrush, QColor
 from PySide6.QtCore import QTimer
