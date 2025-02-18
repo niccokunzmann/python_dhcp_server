@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dhcp-server"
+license = {file = "LICENSE"}
+keywords = ["dhcp", "logging", "discover", "LAN", "raspberry-pi"]
+dynamic = ["urls", "version"]
+
+authors = [
+  { name="Nicco Kunzmann", email="niccokunzmann@rambler.ru" },
+]
+maintainers = [
+  { name="Nicco Kunzmann", email="niccokunzmann@rambler.ru" },
+]
+description = "Very simple DHCP server written in Python."
+readme = "README.md"
+requires-python = ">=3.9"
+
+# see https://pypi.python.org/pypi?%3Aaction=list_classifiers
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Internet",
+    "Topic :: System :: Logging",
+    "Topic :: System :: Monitoring",
+    "Topic :: System :: Networking",
+    "Topic :: System :: Networking :: Monitoring",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+]
+
+
+dependencies = []
+
+
+[project.optional-dependencies]
+qt = [
+    "pyside6",
+    "pyyaml",
+]
+
+[project.scripts]
+python-dhcp-server-tk = "dhcp_server.tk:main"
+python-dhcp-server-qt = "dhcp_server.qt:main"
+
+[tool.hatch.metadata.hooks.vcs.urls]
+Homepage = "https://github.com/niccokunzmann/python_dhcp_server"
+Repository = "https://github.com/niccokunzmann/python_dhcp_server/"
+source_archive = "https://github.com/niccokunzmann/python_dhcp_server/archive/{commit_hash}.zip"
+Issues = "https://github.com/niccokunzmann/python_dhcp_server/issues"
+Documentation = "https://github.com/niccokunzmann/python_dhcp_server"
+Changelog = "https://github.com/niccokunzmann/python_dhcp_server?tab=readme-ov-file#changelog"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+# see https://github.com/ofek/hatch-vcs/issues/43#issuecomment-1553065222
+local_scheme = "no-local-version"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "dhcp_server/_version.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true

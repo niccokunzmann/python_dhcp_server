@@ -5,8 +5,9 @@ import struct
 import queue
 import collections
 import traceback
-import random
 import socket
+
+import yaml
 
 from listener import *
 
@@ -242,6 +243,12 @@ class DHCPServerConfiguration(object):
     def load(self, file):
         with open(file) as f:
             exec(f.read(), self.__dict__)
+            
+    def load_yaml(self, file:str):
+        """Load a yaml file."""
+        with open(file) as f:
+            self.__dict__.update(yaml)
+        
 
     def adjust_if_this_computer_is_a_router(self):
         ip_addresses = get_host_ip_addresses()

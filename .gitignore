@@ -51,3 +51,7 @@ hosts.csv
 
 *.swp
 .vscode/tasks.json
+
+.venv
+dhcp_server/_version.py
+dist
