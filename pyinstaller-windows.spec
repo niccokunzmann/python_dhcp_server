@@ -6,9 +6,9 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        'dhcp_server\\icon.ico',
-        'dhcp_server\\icon.png',
-        'dhcp_server\\python-dhcp-server-qt.yml'
+        ('dhcp_server\\icon.ico', '.'),
+        ('dhcp_server\\icon.png', '.'),
+        ('dhcp_server\\python-dhcp-server-qt.yml', '.'),
     ],
     hiddenimports=[
         'pyyaml'
@@ -32,12 +32,13 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon="dhcp_server\\icon.ico"
 )
 coll = COLLECT(
     exe,
@@ -46,5 +47,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='python-dhcp-server-qt',
+    name='python-dhcp-server-windows',
 )

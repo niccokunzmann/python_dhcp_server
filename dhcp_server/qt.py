@@ -1,7 +1,7 @@
 """Run the Python DHCP server with QT."""
 import os
 import signal
-from PySide6.QtWidgets import QApplication, QTextEdit, QMainWindow, QErrorMessage, QTableWidget, QTableWidgetItem
+from PySide6.QtWidgets import QApplication, QMainWindow, QErrorMessage, QTableWidget, QTableWidgetItem
 from PySide6.QtGui import QIcon, QFont, QBrush, QColor
 from PySide6.QtCore import QTimer
 
@@ -73,8 +73,8 @@ def main():
     #configuration.adjust_if_this_computer_is_a_router()
     config_file = os.path.join(HERE, THIS_CONFIG)
     if not os.path.exists(THIS_CONFIG):
-        with open(THIS_CONFIG, "w") as f:
-            with open(config_file) as s:
+        with open(config_file) as s:
+            with open(THIS_CONFIG, "w") as f:
                 f.write(s.read())
         print("Created config file:", config_file)
     configuration.load_yaml(THIS_CONFIG)
