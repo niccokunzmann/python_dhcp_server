@@ -9,7 +9,7 @@ Abhängigkeiten als Python 3.
 
 - [Installieren][2]
 - [Beitragen][1]
-- [View the Source][3]
+- [Quelltext ansehen][3]
 
 ## Kompatibilität
 
