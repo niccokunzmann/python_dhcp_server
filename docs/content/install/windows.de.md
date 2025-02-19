@@ -2,12 +2,12 @@
 title: "Windows"
 ---
 
-You can install this software by downloading the [release][2] named
-`Simple-DHCP-Server-Windows-X.Y.Z.zip` file. Unpack the zip file, you will find
-an executable `.exe` file inside.
+Du kannst die Software installieren, indem du die [Version][2] namens
+`Simple-DHCP-Server-Windows-X.Y.Z.zip` herunterlädst. Entpacke das Archiv und
+finde die `.exe` Datei darin.
 
-You might need to unblock the file:
+Eventuell musst du die Datei entblocken:
 
-![Properties -> Unblock -> OK](/img/windows-unblock.png)
+![Eigenschaften -> Entsperren -> OK](/img/windows-unblock.png)
 
 [2]: https://github.com/niccokunzmann/simple_dhcp_server/releases
