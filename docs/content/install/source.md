@@ -4,7 +4,7 @@ type = "chapter"
 weight = 3
 +++
 
-You can install the source files directly.
+You can install the source files directly. There are many ways to do that.
 
 ## PyPI
 
