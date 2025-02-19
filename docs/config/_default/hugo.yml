@@ -1,0 +1,8 @@
+baseURL: 'https://example.org/'
+languageCode: 'en'
+title: 'Simple DHCP Server'
+theme: hugo-theme-relearn
+defaultContentLanguage: 'en'
+defaultContentLanguageInSubdir: false
+
+# For the other languages, see https://gohugo.io/getting-started/configuration/
