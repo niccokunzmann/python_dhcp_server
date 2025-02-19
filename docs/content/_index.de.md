@@ -1,5 +1,5 @@
 ---
-title: "" type: "home"
+type: "home"
 ---
 
 This is a purely Python DHCP server that does not require any additional
