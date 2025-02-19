@@ -7,6 +7,9 @@ Abhängigkeiten als Python 3.
 
 ![](/img/windows-tk.png)
 
+- [Install][2]
+- [Contribute][1]
+
 ## Kompatibilität
 
 It was testet under Ubuntu 14 and later with Python and Windows 7 and later. It
@@ -37,5 +40,5 @@ Dieses Programm wurde erstellt, um Raspberry-Pis im Netzwerk zu finden.
 - [Adafruit-Pi-Finder](https://github.com/adafruit/Adafruit-Pi-Finder)
 - [Angry IP](https://angryip.org/)
 
-[1]: /contribute
-
+[1]: contribute
+[2]: install
