@@ -1,7 +1,7 @@
-+++
-title = "Mac OS"
-type = "chapter"
-weight = 2
-+++
+---
+title: "Mac OS"
+---
 
-This is a new chapter.
+You can install from [source][1].
+
+[1]: ./source.md

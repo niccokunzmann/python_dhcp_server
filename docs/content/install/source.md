@@ -1,8 +1,6 @@
-+++
-title = "Source"
-type = "chapter"
-weight = 3
-+++
+---
+title: "Source"
+---
 
 You can install the source files directly. There are many ways to do that.
 

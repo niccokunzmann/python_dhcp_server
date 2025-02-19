@@ -1,8 +1,6 @@
-+++
-title = "Linux"
-type = "chapter"
-weight = 2
-+++
+---
+title: "Linux"
+---
 
 ## Debian/Ubuntu
 
