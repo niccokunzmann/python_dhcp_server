@@ -1,11 +1,11 @@
 ---
-title: "Install"
+title: "Installieren"
 ---
 
-You can install the Simple DHCP Server on [Windows], [Linux] and [Mac OS].
-Additionally to that, you can install it from [source][1] in many ways.
+Du kannst den Einfachen DHCP Server auf [Windows], [Linux] und [Mac OS]
+benutzen. Außerdem kann er vom [Quelltext][1] installiert werden.
 
-You can view all [releases][2].
+Schau Dir alle [Versionen][2] an.
 
 [Windows]: ./windows.md
 [Linux]: ./linux.md
