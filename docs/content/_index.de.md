@@ -1,4 +1,6 @@
-+++ title = "" type = "home" +++
+---
+title: "" type: "home"
+---
 
 This is a purely Python DHCP server that does not require any additional
 libraries or installs other that Python 3.
