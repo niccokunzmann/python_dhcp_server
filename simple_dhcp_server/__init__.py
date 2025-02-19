@@ -1,5 +1,9 @@
 """The simple DHCP server.
 
+View the documentation:
+
+    https://dhcp.quelltext.eu/
+
 You can run these programs:
 
     simple-dhcp-server-tk
