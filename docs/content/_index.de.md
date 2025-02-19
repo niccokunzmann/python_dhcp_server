@@ -7,28 +7,27 @@ Abhängigkeiten als Python 3.
 
 ![](/img/windows-tk.png)
 
-- [Install][2]
-- [Contribute][1]
+- [Installieren][2]
+- [Beitragen][1]
 
 ## Kompatibilität
 
-It was testet under Ubuntu 14 and later with Python and Windows 7 and later. It
-does not use any operating system specific Python functions, so it should work
-when Python 3 works.
+Die Software wurde unter Ubuntu 14 und späteren Versionen sowie Windows 7 und
+späteren Version getestet. Sie benutzt keine spezifischen Funktionen und sollte
+funktionieren, wenn Python 3 geht.
 
 ## Fähigkeiten
 
-This DHCP server program will assign IP addresses ten seconds later than
-requested. So, it can be used in networks that already have a DHCP server
-running.
+Der DHCP-Server vergibt IP-Adressen zehn Sekunden nach der Anfrage. Damit kann
+er in Netzwerken laufen, die schon DHCP-Server laufen haben.
 
 Dieser Einfache DHCP Server
 
 - zeigt andere Geräte im Netzwerk an
-- lists IP address, MAC address and host name
+- listet IP-Adresse, MAC-Adresse und Gerätename
 - zeigt Veränderungen und Updates an
 - vergibt IP-Adressen 10 Sekunden später als herkömmliche DHCP-Server
-- remembers addresses in the `hosts.csv` file
+- merkt sich die Adressen in der `hosts.csv` Datei
 - kann so eingerichtet werden, dass alle DHCP-Optionen nutzbar sind
 
 [Mithilfe ist erwünscht!][1]
