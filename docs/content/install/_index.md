@@ -1,8 +1,6 @@
-+++
-title = "Install"
-type = "chapter"
-weight = 1
-+++
+---
+title: "Install"
+---
 
 You can install the Simple DHCP Server on [Windows], [Linux] and [Mac OS].
 Additionally to that, you can install it from [source][1] in many ways.

@@ -1,8 +1,6 @@
-+++
-title = "Changelog"
-type = "chapter"
-weight = 10
-+++
+---
+title: "Changelog"
+---
 
 These are the recent changes.
 If a version is not released, yet, it can still show up.

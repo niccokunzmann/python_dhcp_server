@@ -1,8 +1,6 @@
-+++
-title = "Contribute"
-type = "chapter"
-weight = 3
-+++
+---
+title: "Contribute"
+---
 
 Contributions are welcome!
 

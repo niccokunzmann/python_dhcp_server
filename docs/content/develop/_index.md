@@ -1,8 +1,6 @@
-+++
-title = "Development"
-type = "chapter"
-weight = 5
-+++
+---
+title: "Develop"
+---
 
 To setup this software for development, follow these steps:
 
