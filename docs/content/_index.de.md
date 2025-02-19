@@ -2,37 +2,36 @@
 type: "home"
 ---
 
-This is a purely Python DHCP server that does not require any additional
-libraries or installs other that Python 3.
+Dieser DHCP Server ist in Python geschrieben und benötigt keine anderen
+Abhängigkeiten als Python 3.
 
 ![](/img/windows-tk.png)
 
-## Compatibility
+## Kompatibilität
 
-It was testet under Ubuntu 14 with Python and Windows 7. It does not use any
-operating system specific Python functions, so it should work when Python 3
-works.
+Diese Software wurde unter Ubuntu 14 mit Python und Windows 7 getestet. Sie
+braucht keine speziellen Funktionen und sollte funktionieren, wenn Python 3
+installiert wurde.
 
-## Features
+## Fähigkeiten
 
-This DHCP server program will assign IP addresses ten seconds after it received
-packets from clients. So it can be used in networks that already have a dhcp
-server running.
+Dieser DHCP-Server wird IP-Adressen zehn Sekunden später zuweisen. Damit kann er
+in einem Netzwerk laufen, in dem schon andere DHCP server sind.
 
-This Simple DHCP server
+Dieser Einfache DHCP Server
 
-- shows clients in the network
-- lists IP address, Mac address and host name
-- highlights recently refreshed/added clients
-- assigns IP addresses 10 seconds later than usual DHCP servers
-- remembers addresses in the `hosts.csv` file.
-- can be configured to serve all DHCP options using Python/Yaml
+- zeigt andere Geräte im Netzwerk an
+- listet IP-Adresse, MAC, und Gerätename
+- zeigt Veränderungen und Updates an
+- vergibt IP-Adressen 10 Sekunden später als herkömmliche DHCP-Server
+- merkt such Adressen in der `hosts.csv`-Datei.
+- kann so eingerichtet werden, dass alle DHCP-Optionen nutzbar sind
 
-[Contributions welcome!][1]
+[Mithilfe ist erwünscht!][1]
 
-## Related Work
+## Ähnliche Software
 
-This program was created to find Raspberry Pis in the network.
+Dieses Programm wurde erstellt, um Raspberry-Pis im Netzwerk zu finden.
 
 - [Adafruit-Pi-Finder](https://github.com/adafruit/Adafruit-Pi-Finder) - finde
   deinen Raspberry Pi im Netzwerk
