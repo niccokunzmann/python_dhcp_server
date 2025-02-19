@@ -6,6 +6,9 @@ This is a purely Python DHCP server that does not require any additional librari
 
 ![](/img/windows-tk.png)
 
+- [Install][2]
+- [Contribute][1]
+
 ## Compatibility
 
 It was testet under Ubuntu 14 and later with Python and Windows 7 and later.
@@ -33,5 +36,5 @@ This program was created to find Raspberry Pis in the network.
 - [Adafruit-Pi-Finder](https://github.com/adafruit/Adafruit-Pi-Finder)
 - [Angry IP](https://angryip.org/)
 
-[1]: /contribute
-
+[1]: contribute
+[2]: install
