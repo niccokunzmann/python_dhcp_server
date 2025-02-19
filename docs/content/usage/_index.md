@@ -1,8 +1,6 @@
-+++
-title = "Configure"
-type = "chapter"
-weight = 2
-+++
+---
+title: "Configure"
+---
 
 ![](/img/windows-files.png)
 
