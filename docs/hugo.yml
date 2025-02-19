@@ -1,0 +1,4 @@
+baseURL: 'https://example.org/'
+languageCode: 'en-us'
+title: 'Simple DHCP Server'
+theme: hugo-theme-relearn
