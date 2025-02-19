@@ -74,11 +74,13 @@ jobs:
           HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
           HUGO_ENVIRONMENT: production
           TZ: Europe/London
-        run: hugo
+        run: |
+          cd docs
+          hugo
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./docs/public
 
   # Deployment job
   deploy:

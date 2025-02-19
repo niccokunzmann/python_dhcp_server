@@ -1,7 +1,7 @@
 +++
 title = "Linux"
 type = "chapter"
-weight = 1
+weight = 2
 +++
 
 ## Debian/Ubuntu

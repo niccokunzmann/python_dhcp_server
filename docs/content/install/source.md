@@ -1,7 +1,7 @@
 +++
 title = "Source"
 type = "chapter"
-weight = 1
+weight = 3
 +++
 
 You can install the source files directly.

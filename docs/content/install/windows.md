@@ -1,7 +1,7 @@
 +++
 title = "Windows"
 type = "chapter"
-weight = 1
+weight = 2
 +++
 
 You can install this software by downloading the [release][2] named `Simple-DHCP-Server-Windows-X.Y.Z.zip` file.

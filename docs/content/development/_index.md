@@ -4,6 +4,29 @@ type = "chapter"
 weight = 1
 +++
 
+To setup this software for development, follow these steps:
+
+1. Clone the repository:
+
+    ```sh
+    git clone https://github.com/niccokunzmann/simple_dhcp_server.git
+    cd simple_dhcp_server
+    ```
+
+2. Install [tox]:
+
+    ```sh
+    pip install tox
+    ```
+
+## Running Tests
+
+The `tox.ini` file has several environments that can be used to run the tests.
+
+```sh
+tox
+```
+
 ## New Releases
 
 When the source code is changed, create a new release.
