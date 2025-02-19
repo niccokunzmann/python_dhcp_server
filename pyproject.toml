@@ -52,12 +52,12 @@ simple-dhcp-server-listen = "simple_dhcp_server.listener:main"
 
 
 [tool.hatch.metadata.hooks.vcs.urls]
-Homepage = "https://github.com/niccokunzmann/python_simple_dhcp_server"
-Repository = "https://github.com/niccokunzmann/python_simple_dhcp_server/"
-source_archive = "https://github.com/niccokunzmann/python_simple_dhcp_server/archive/{commit_hash}.zip"
-Issues = "https://github.com/niccokunzmann/python_simple_dhcp_server/issues"
-Documentation = "https://github.com/niccokunzmann/python_simple_dhcp_server"
-Changelog = "https://github.com/niccokunzmann/python_simple_dhcp_server?tab=readme-ov-file#changelog"
+Homepage = "https://dhcp.quelltext.eu"
+Repository = "https://github.com/niccokunzmann/simple_dhcp_server/"
+source_archive = "https://github.com/niccokunzmann/simple_dhcp_server/archive/{commit_hash}.zip"
+Issues = "https://github.com/niccokunzmann/simple_dhcp_server/issues"
+Documentation = "https://dhcp.quelltext.eu/"
+Changelog = "https://dhcp.quelltext.eu/changes"
 
 [tool.hatch.version]
 source = "vcs"
