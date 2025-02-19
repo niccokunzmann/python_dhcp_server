@@ -1,7 +1,7 @@
 +++
 title = "Development"
 type = "chapter"
-weight = 1
+weight = 5
 +++
 
 To setup this software for development, follow these steps:
@@ -27,18 +27,31 @@ The `tox.ini` file has several environments that can be used to run the tests.
 tox
 ```
 
+## Documentation
+
+For the docuentation, we use [Hugo].
+Install hugo and run it.
+
+```sh
+# in the repository
+cd docs
+hugo serve
+```
+
+And head over to the website.
+
 ## New Releases
 
 When the source code is changed, create a new release.
 
-1. Log the changes: Edit the Changelog Section in
+1. Log the changes:
 
-    - `README.md`
-    - `python_dhcp_server/flatpak/io.github.niccokunzmann.python_dhcp_server.xml`
+    - `docs/changes/_index.md`
+    - `flatpak/io.github.niccokunzmann.python_dhcp_server.xml`
 
     ```sh
     git log # find changes
-    git add README.md
+    git add docs/changes/_index.md flatpak/io.github.niccokunzmann.python_dhcp_server.xml
     git commit -m"log changes"
     ```
 
@@ -51,3 +64,6 @@ When the source code is changed, create a new release.
 
 3. Head over to [the Flathub metadata](https://github.com/niccokunzmann/io.github.niccokunzmann.python_dhcp_server/)
    and create a new release.
+
+
+[Hugo]: https://gohugo.io/

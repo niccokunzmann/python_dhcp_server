@@ -1,7 +1,7 @@
 +++
 title = "Contribute"
 type = "chapter"
-weight = 1
+weight = 3
 +++
 
 Contributions are welcome!

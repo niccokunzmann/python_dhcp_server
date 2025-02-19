@@ -1,7 +1,7 @@
 +++
 title = "Changelog"
 type = "chapter"
-weight = 1
+weight = 10
 +++
 
 These are the recent changes.
