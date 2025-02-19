@@ -153,6 +153,6 @@ jobs:
         uses: ncipollo/release-action@v1.15.0
         with:
           allowUpdates: true
-          body: "For a list of changes, please refer to the [Changelog](https://github.com/niccokunzmann/python_dhcp_server?tab=readme-ov-file#changelog)."
+          body: "For a list of changes, please refer to the [Changelog](https://dhcp.quelltext.eu/changes/)."
           generateReleaseNotes: false
           artifacts: "dist/release/*"
