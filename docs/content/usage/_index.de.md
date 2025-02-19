@@ -1,5 +1,5 @@
 ---
-title: "Configure"
+title: "Konfigurieren"
 ---
 
 ![](/img/windows-files.png)
