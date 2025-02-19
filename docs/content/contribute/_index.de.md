@@ -1,20 +1,21 @@
 ---
-title: "Contribute"
+title: "Beitragen"
 ---
 
-Contributions are welcome!
+Beitragen ist willkommen!
 
-Here are some ways in which you can help:
+So kannst du helfen:
 
-- If you find a bug, please open an [issue][0].
-- Write documentation for how to use this on your operation system.
-- Give us a [star on GitHub][1]
-- [Fund development](#funding)
-- [Translate this website][4]
+- Wenn Du einen Fehler findest, dann erstelle bitte eine [Issue][0].
+- Schreibe Dokumentation darüber, wie die Software auf Deinem Betriebssystem
+  aussieht.
+- Gib uns einen [Stern auf GitHub][1]
+- [Gib uns Geld für die Wartung](#funding)
+- [Übersetze diese Webseite][4]
 
-## Funding
+## Finanzieren
 
-There are several ways in which you can fund this software to make it nicer:
+Es gibt verschiedene Wege, die Software zu unterstützen, damit sie schöner wird:
 
 - [GitHub sponsors][2]
 - [Polar][3]
