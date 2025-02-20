@@ -45,6 +45,10 @@ isoliert.
     sudo pipx run --spec simple-dhcp-server[qt] python-dhcp-server-qt  
     ```
 
+## Development Setup
+
+You can also [setup the Simple DHCP Server for development][4].
+
 ## Benutzung
 
 Nach der Installation, schau die [Nutzung][3] an.
@@ -54,3 +58,4 @@ Nach der Installation, schau die [Nutzung][3] an.
 [GitHub]: https://github.com/niccokunzmann/simple_dhcp_server/
 [3]: /usage/cmd.md
 [pipx]: https://pipx.pypa.io/stable/installation/
+[4]: ../develop
