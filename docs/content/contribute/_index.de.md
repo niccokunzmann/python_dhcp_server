@@ -11,7 +11,8 @@ So kannst du helfen:
   aussieht.
 - Gib uns einen [Stern auf GitHub][1]
 - [Gib uns Geld für die Wartung](#funding)
-- [Übersetze diese Webseite][4]
+- [Translate this website][4]
+  [![](https://hosted.weblate.org/widget/simple-dhcp-server/multi-green.svg)][4]
 
 ## Finanzieren
 
