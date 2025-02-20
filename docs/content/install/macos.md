@@ -2,11 +2,16 @@
 title: "Mac OS"
 ---
 
+![](/img/macos-install.png)
+
 To install the app, download the release `Simple DHCP Server X.Y.Z.dmg` from the [latest release][3].
+Open it and move the app into the Applications.
 
 ## Configuration and Cache
 
-Your configuration files are stored in `~/Library/Caches/eu.quelltext.dhcp`.
+![](/img/macos-files.png)
+
+Your configuration files are stored in `~/Library/Caches/eu.quelltext.dhcp/`.
 
 Read more about [configuration and usage][2].
 
