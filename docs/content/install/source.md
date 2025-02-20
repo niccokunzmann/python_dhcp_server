@@ -1,5 +1,5 @@
 ---
-title: "Source"
+title: "Other Sources"
 ---
 
 You can install the source files directly. There are many ways to do that.
