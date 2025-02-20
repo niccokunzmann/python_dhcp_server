@@ -1,35 +1,35 @@
 ---
-title: "Command Line Usage"
+title: "Kommandozeile"
 ---
 
-The Simple DHCP Server provides several options for executing it, depending on
-the install method.
+Der einfache DHCP Server bietet mehrere Optionen für die Ausführung, je nach
+Installationsmethode.
 
-* Get **Help**:
+* Bekomm **Hilfe**:
 
     ```sh
     simple-dhcp-server
     ```
 
-* Tk **User Interface**:
+* Tk **Benutzeroberfläche**:
 
     ```sh
     simple-dhcp-server-tk
     ```
 
-* QT **User Interface**:
+* QT **Benutzeroberfläche**:
 
     ```sh
     simple-dhcp-server-qt
     ```
 
-* **Command Line** with a server:
+* **Kommandozeile** starte einen Server:
 
     ```sh
     simple-dhcp-server-serve
     ```
 
-* **Command Line** just listening to what is going on:
+* **Kommandozeile** höre nur zu, was passiert:
 
     ```sh
     simple-dhcp-server-listen
@@ -37,5 +37,5 @@ the install method.
 
 ## Linux (sudo)
 
-On Linux, you need to run the commands with `sudo` to have access to the
-network. That is because the DHCP port 67 is below 1024.
+Unter Linux musst Du die Kommandos mit `sudo` ausführen, damit sie Zugriff auf
+das Netzwerk haben. Das liegt daran, dass der DHCP-Port 67 unter 1024 liegt.
