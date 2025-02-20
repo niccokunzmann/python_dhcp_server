@@ -14,7 +14,7 @@ If you have installed [Python], you can run `pip` to install the package from [P
 pip install simple-dhcp-server[qt]
 ```
 
-### TK Frontend
+### Tk Frontend
 
 If you cannot install QT, you can use the Tk version:
 
