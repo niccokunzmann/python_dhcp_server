@@ -4,68 +4,70 @@ title: "Konfigurieren"
 
 ![](/img/windows-files.png)
 
-When you first start the Simple DHCP Server, you can see two files appearing.
+Wenn Du den Einfachen DHCP Server zum ersten Mal startest, dann erscheinen zwei
+Dateien.
 
-- `hosts.csv` is the database of all devices that were known. This is used to
-  re-assign the same IP address and remember assignments between starts of the
-  program. You can safely delete this if your window becomes too full. You can
-  also read this in with a program.
+- `hosts.csv` ist die Datenbank aller Geräte, die bekannt sind. Die wird
+  benutzt, um sich die IP-Adressen zu merken und wieder zu vergeben, auch wenn
+  das Programm wieder geöffnet wird. Du kannst diese Datei gern löschen, z.B.
+  wenn das Fenster zu groß wird. Du kannst die Datei auch mit anderen Programmen
+  auslesen.
 
-- `simple-dhcp-server-qt.yml` is a configuration file in the YAML format.
+- `simple-dhcp-server-qt.yml` ist die Konfigurationsdatei im YAML-Format.
 
-- `simple-dhcp-server-tk.conf` is a Python program as confguration file.
+- `simple-dhcp-server-tk.conf` ist eine Python-Datei zur Konfiguration.
 
-Both files are extensively documented.
+Beide Dateien sind stark dokumentiert.
 
-## Configuration Options
+## Konfigurations-Optionen
 
-It is safe to delete the configuration file. If the program does not start, it
-might be because of mistake in the file. Delete it then. Here are some of the
-configuration options.
+Es ist ok, die Konfigurationsdatei zu löschen. Wenn das Programm nicht startet,
+dann liegt es vielleicht an einem Fehler in der Datei. Lösche sie dann. Hier
+werden nun Konfigurationsmöglichkeiten beschrieben.
 
-### Timings
+### Zeit
 
-The DHCP server is slower than those already on the network, so it does not
-replace them but responds when everybody else had the chance. These are the
-timings:
+Der DHCP-Server ist langsamer als die bereits im Netzwerk, so dass er die
+anderen nicht ersetzt, sondern erst reagiert, wenn alle anderen die Chance
+hatten. So lange wartet er:
 
 ```yaml
 dhcp_offer_after_seconds: 10
 dhcp_acknowledge_after_seconds: 10
 ```
 
-### Network
+### Netzwerk
 
-You can change the IP address if you like:
+Du kannst die IP-Adresse verändern, wenn du magst:
 
 ```yaml
 network: '192.168.137.0'
 subnet_mask: '255.255.255.0'
 ```
 
-If you have a router for Internet access, configure it like this:
+Wenn du einen Router mit Internet-Zugang hast, setze ihn so:
 
 ```yaml
 router:
 - 192.168.137.1
 ```
 
-Same for the DNS servers. Usually, this is the same as your router from above.
-If you like to use a privacy friendly server:
+Das selbe für DNS-Server. Normalerweise kannst du auch den Router von oben
+verwenden. Hier ist ein Server für die Privatsphäre:
 
 ```yaml
 domain_name_server:
 - 5.9.164.112  # digital courage
 ```
 
-### More Options
+### Mehr Optionen
 
-More options are documented in the files respectively. If you use the
-`simple-dhcp-server-tk.conf` file, you need to change syntax.
+Es gibt noch mehr Optionen, die in der Datei dokumentiert sind. Wenn du
+`simple-dhcp-server-tk.conf` benutzt, musst du die Schreibweise anpassen.
 
-## Command Line
+## Kommandozeile
 
-There is a whole chapter on how to [use the Simple DHCP Server from the command
-line][1].
+Es gibt ein ganzes Kapitel, wie man [den Simple DHCP Server aus der
+Kommandozeile verwendet][1].
 
 [1]: cmd.md
