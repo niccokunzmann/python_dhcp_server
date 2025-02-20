@@ -22,7 +22,7 @@ The Simple DHCP Server provides several options for executing it, depending on t
     simple-dhcp-server-qt
     ```
 
-* **Command Line** with a server:
+* **Command Line** start a server:
 
     ```sh
     simple-dhcp-server-serve

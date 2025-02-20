@@ -35,7 +35,7 @@ pip install git+https://github.com/niccokunzmann/simple_dhcp_server.git
 [pipx] makes installation even nicer because it isolates the app.
 
 1. Install [pipx]
-2. Install and start:
+2. Install and start the Simple DHCP Server:
 
     ```sh
     sudo pipx run --spec simple-dhcp-server[qt] python-dhcp-server-qt  
