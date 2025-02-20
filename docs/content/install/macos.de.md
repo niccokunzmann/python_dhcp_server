@@ -2,14 +2,14 @@
 title: "Mac OS"
 ---
 
-## Python Package
+## Python-Paket
 
-You should first setup Python 3 using [brew].
+Zuerst musst Du Python 3 mit [brew] aufsetzen.
 
 ```sh
 brew install python-tk
 ```
 
-Then, you can install the [Python package][1].
+Danach kannst Du das [Python-Paket][1] installieren.
 
 [1]: ./source.md
