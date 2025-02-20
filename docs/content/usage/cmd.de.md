@@ -23,7 +23,7 @@ Installationsmethode.
     simple-dhcp-server-qt
     ```
 
-* **Kommandozeile** starte einen Server:
+* **Command Line** start a server:
 
     ```sh
     simple-dhcp-server-serve
