@@ -4,18 +4,18 @@ title: "Linux"
 
 ## Debian/Ubuntu
 
-On Ubuntu, you have the choice to install the package via [source][1].
+Auf Ubuntu kannst Du das Paket von [anderen Quellen][1] installieren.
 
-If you would like to use the Tk frontend, also intall these packages:
+Solltest Du die Tk-Benutzeroberfläche wählen, installiere auch diese Pakete:
 
 ```sh
 sudo apt-get install python3 python3-tk
 pip install simple-dhcp-server
 ```
 
-## Usage
+## Benutzung
 
-After installation, refer to the [usage][3].
+Nach der Installation, schau die [Nutzung][3] an.
 
 
 [1]: source.md
