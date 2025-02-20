@@ -106,7 +106,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup environment
-        run: python python-tk create-dmg
+        run: brew install python python-tk create-dmg
       - name: Install tox
         run: pip install tox
       - name: Create App
@@ -150,6 +150,7 @@ jobs:
       - run-tests
       - sign-windows-release
       - deploy-tag-to-pypi
+      - macos-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
