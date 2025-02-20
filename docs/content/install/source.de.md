@@ -1,5 +1,5 @@
 ---
-title: "Andere Quellen"
+title: "Other Sources"
 ---
 
 Du kannst die Quelldateien direkt installieren. Es gibt mehrere Wege, das zu
@@ -16,7 +16,7 @@ Wenn Du [Python] installiert hast, kannst Du `pip` benutzen, um die Pakete von
 pip install simple-dhcp-server[qt]
 ```
 
-### Tk Oberfläche
+### Tk Frontend
 
 Wenn Du QT nicht installieren kannst, dann kannst du die Tk-Version benutzen:
 
@@ -39,7 +39,7 @@ pip install git+https://github.com/niccokunzmann/simple_dhcp_server.git
 isoliert.
 
 1. Installiere [pipx]
-2. Installiere und starte den Einfachen DHCP Server:
+2. Install and start the Simple DHCP Server:
 
     ```sh
     sudo pipx run --spec simple-dhcp-server[qt] python-dhcp-server-qt  
