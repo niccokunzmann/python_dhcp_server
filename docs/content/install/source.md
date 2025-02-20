@@ -41,6 +41,10 @@ pip install git+https://github.com/niccokunzmann/simple_dhcp_server.git
     sudo pipx run --spec simple-dhcp-server[qt] python-dhcp-server-qt  
     ```
 
+## Development Setup
+
+You can also [setup the Simple DHCP Server for development][4].
+
 ## Usage
 
 After installation, refer to the [usage][3].
@@ -50,3 +54,4 @@ After installation, refer to the [usage][3].
 [GitHub]: https://github.com/niccokunzmann/simple_dhcp_server/
 [3]: /usage/cmd.md
 [pipx]: https://pipx.pypa.io/stable/installation/
+[4]: ../develop

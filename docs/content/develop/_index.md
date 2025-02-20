@@ -2,6 +2,32 @@
 title: "Develop"
 ---
 
+## Installing Python
+
+Generally, we need Python 3.
+This guides through the setup.
+
+### Windows
+
+On Windows, you can download and install Python from [Python.org](https://www.python.org/).
+
+### Linux
+
+You can use the system installation of Python.
+Also, create a virtual environment.
+
+### MacOS
+
+Under MacOS, use [brew].
+
+```sh
+brew install python python-tk create-dmg
+```
+
+[brew]: https://brew.sh/
+
+## Setup
+
 To setup this software for development, follow these steps:
 
 1. Clone the repository:
