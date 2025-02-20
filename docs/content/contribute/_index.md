@@ -11,6 +11,7 @@ Here are some ways in which you can help:
 - Give us a [star on GitHub][1]
 - [Fund development](#funding)
 - [Translate this website][4]
+  [![](https://hosted.weblate.org/widget/simple-dhcp-server/multi-green.svg)][4]
 
 ## Funding
 
