@@ -6,6 +6,10 @@ These are the recent changes.
 If a version is not released, yet, it can still show up.
 You can view the [realeases on GitHub][releases].
 
+### 1.0.5
+
+- Create MacOS release
+
 ### 1.0.4
 
 - Correct links to new documentation site.

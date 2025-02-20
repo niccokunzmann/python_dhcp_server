@@ -101,7 +101,7 @@ jobs:
 
   macos-release:
     name: Create MacOS Release
-    #if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
