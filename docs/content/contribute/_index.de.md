@@ -12,7 +12,8 @@ So kannst du helfen:
 - Gib uns einen [Stern auf GitHub][1]
 - [Gib uns Geld für die Wartung](#funding)
 - [Translate this website][4]
-  [![](https://hosted.weblate.org/widget/simple-dhcp-server/multi-green.svg)][4]
+
+[![](https://hosted.weblate.org/widget/simple-dhcp-server/multi-green.svg)][4]
 
 ## Finanzieren
 
