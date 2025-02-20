@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-from .dhcp import *
+import sys
+import os
+
+from simple_dhcp_server.dhcp import *
 try:
     from tkinter import *
     from tkinter.messagebox import showerror
@@ -8,8 +11,6 @@ except ImportError:
     print("    sudo apt-get install python3-tk")
     input("Press ENTER to exit!")
     exit(1)
-import sys
-import os
 
 HERE = os.path.dirname(__file__) or "."
 

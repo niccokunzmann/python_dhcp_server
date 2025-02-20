@@ -98,7 +98,26 @@ jobs:
         fi
         twine check dist/*
         twine upload dist/*
-          
+
+  macos-release:
+    name: Create MacOS Release
+    #if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup environment
+        run: python python-tk create-dmg
+      - name: Install tox
+        run: pip install tox
+      - name: Create App
+        run: tox -e mac
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-macos
+          path: "dist/Simple DHCP Server.dmg"
+          retention-days: 1
+          compression-level: 0
+        
   sign-windows-release:
     name: Sign Windows Release
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
@@ -149,6 +168,8 @@ jobs:
             cd dist/release-sign-windows/simple-dhcp-server-windows
             zip -r "../../release/Simple-DHCP-Server-Windows-${{github.ref_name}}.zip" *
           )
+      - name: Create MacOS Release
+        run: cp "dist/release-macos/Simple DHCP Server.dmg" "dist/release/Simple DHCP Server ${{github.ref_name}}.dmg"
       - name: create release
         uses: ncipollo/release-action@v1.15.0
         with:
