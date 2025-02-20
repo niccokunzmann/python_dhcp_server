@@ -1,5 +1,5 @@
 ---
-title: "Develop"
+title: "Development Setup"
 ---
 
 ## Installing Python
@@ -9,12 +9,26 @@ This guides through the setup.
 
 ### Windows
 
-On Windows, you can download and install Python from [Python.org](https://www.python.org/).
+On Windows, you can download and install Python 3 from [Python.org](https://www.python.org/).
 
 ### Linux
 
 You can use the system installation of Python.
 Also, create a virtual environment.
+
+Check that you have Python3 installed:
+
+```sh
+python3 --version
+```
+
+#### Debian/Ubuntu
+
+Install these packages:
+
+```sh
+sudo apt install python3 python3-pip python3-tk
+```
 
 ### MacOS
 
