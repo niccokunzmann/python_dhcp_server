@@ -1,23 +1,24 @@
 ---
-title: "Source"
+title: "Andere Quellen"
 ---
 
-You can install the source files directly. There are many ways to do that.
+Du kannst die Quelldateien direkt installieren. Es gibt mehrere Wege, das zu
+machen.
 
 ## PyPI
 
-If you have installed [Python], you can run `pip` to install the package from
-[PyPI].
+Wenn Du [Python] installiert hast, kannst Du `pip` benutzen, um die Pakete von
+[PyPI] zu installieren.
 
-### QT Frontend
+### QT Oberfläche
 
 ```sh
 pip install simple-dhcp-server[qt]
 ```
 
-### TK Frontend
+### Tk Oberfläche
 
-If you cannot install QT, you can use the Tk version:
+Wenn Du QT nicht installieren kannst, dann kannst du die Tk-Version benutzen:
 
 ```sh
 pip install simple-dhcp-server
@@ -25,8 +26,8 @@ pip install simple-dhcp-server
 
 ### GitHub
 
-If you have installed [Python], you can run `pip` to install the package from
-[GitHub] directly.
+Wenn Du [Python] installiert hast, kannst Du `pip` ausführen, um das Paket von
+[GitHub] direkt zu installieren.
 
 ```sh
 pip install git+https://github.com/niccokunzmann/simple_dhcp_server.git
@@ -34,18 +35,19 @@ pip install git+https://github.com/niccokunzmann/simple_dhcp_server.git
 
 ## Pipx
 
-[pipx] makes installation even nicer because it isolates the app.
+[pipx] macht die Installation noch einfacher, weil es die App von anderen
+isoliert.
 
-1. Install [pipx]
-2. Install and start:
+1. Installiere [pipx]
+2. Installiere und starte den Einfachen DHCP Server:
 
     ```sh
     sudo pipx run --spec simple-dhcp-server[qt] python-dhcp-server-qt  
     ```
 
-## Usage
+## Benutzung
 
-After installation, refer to the [usage][3].
+Nach der Installation, schau die [Nutzung][3] an.
 
 [Python]: https://www.python.org/
 [PyPI]: https://pypi.org/project/simple-dhcp-server/
