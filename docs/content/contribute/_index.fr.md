@@ -1,20 +1,20 @@
 ---
-title: "Contribute"
+title: "Contribuer"
 ---
 
-Contributions are welcome!
+Les contributions sont les bienvenues !
 
-Here are some ways in which you can help:
+Voici quelques façons de nous aider :
 
-- If you find a bug, please open an [issue][0].
+- Si vous trouvez un bogue, veuillez ouvrir un [issue] [0].
 - Write documentation for how to use this on your operation system.
 - Give us a [star on GitHub][1]
 - [Fund development](#funding)
-- [Translate this website][4]
+- [Traduisez ce site Web][4]
 
 [![](https://hosted.weblate.org/widget/simple-dhcp-server/multi-green.svg)][4]
 
-## Funding
+## Financement
 
 There are several ways in which you can fund this software to make it nicer:
 
