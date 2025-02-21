@@ -15,7 +15,7 @@ pip install simple-dhcp-server
 
 ## Utilisation
 
-After installation, refer to the [usage][3].
+Après installation, reportez-vous à l'[utilisation][3].
 
 
 [1]: source.md
