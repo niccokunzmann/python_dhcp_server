@@ -18,6 +18,12 @@ This Python DHCP server
 - remembers addresses in the `hosts.csv` file.
 - can be configured to serve all DHCP options using Python
 
-Please refer to the [official website][web].
+Have a look at:
+
+- The [official website][web] for installation and configuration instructions.
+- The [source code][source].
+- The [project translation on Weblate][weblate].
 
 [web]: https://dhcp.quelltext.eu
+[source]: https://github.com/niccokunzmann/simple_dhcp_server/
+[weblate]: https://hosted.weblate.org/engage/simple-dhcp-server/
