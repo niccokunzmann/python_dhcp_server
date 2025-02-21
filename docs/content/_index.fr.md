@@ -2,41 +2,42 @@
 type: "home"
 ---
 
-This is a purely Python DHCP server that does not require any additional
-libraries or installs other that Python 3.
+Serveur DHCP entièrement en Python ne nécessitant aucune bibliothèque ou
+installation supplémentaire autre que Python 3.
 
 ![](/img/windows-tk.png)
 
-- [Install][2]
-- [Contribute][1]
-- [View the Source][3]
+- [Installation][2]
+- [Contribuer][1]
+- [Voir la source][3]
 
-## Compatibility
+## Compatibilité
 
 It was testet under Ubuntu 14 and later with Python and Windows 7 and later. It
 does not use any operating system specific Python functions, so it should work
 when Python 3 works.
 
-## Features
+## Fonctionnalités
 
 This DHCP server program will assign IP addresses ten seconds later than
 requested. So, it can be used in networks that already have a DHCP server
 running.
 
-This Simple DHCP server
+Ce serveur DHCP simple
 
-- shows clients in the network
-- lists IP address, MAC address and host name
+- affiche les clients dans le réseau
+- liste l'adresse IP, l'adresse MAC et le nom d'hôte
 - highlights recently refreshed/added clients
 - assigns IP addresses 10 seconds later than usual DHCP servers
-- remembers addresses in the `hosts.csv` file
-- can be configured to serve all DHCP options using Python/Yaml
+- se rappelle des adresses dans le fichier `hosts.csv`
+- peut être configuré pour servir toutes les options DHCP en utilisant
+  Python/Yaml
 
-[Contributions welcome!][1]
+[Les contributions sont les bienvenues !][1]
 
-## Related Work
+## Projets connexes
 
-This program was created to find Raspberry Pis in the network.
+Ce programme a été créé pour rechercher des Raspberry Pis dans le réseau.
 
 - [Adafruit-Pi-Finder](https://github.com/adafruit/Adafruit-Pi-Finder)
 - [Angry IP](https://angryip.org/)
