@@ -4,7 +4,7 @@ title: "Linux"
 
 ## Debian/Ubuntu
 
-On Ubuntu, you have the choice to install the package via [source][1].
+Sur Ubuntu, vous avez le choix d'installer le paquet via [source][1].
 
 If you would like to use the Tk frontend, also intall these packages:
 
@@ -13,7 +13,7 @@ sudo apt-get install python3 python3-tk
 pip install simple-dhcp-server
 ```
 
-## Usage
+## Utilisation
 
 After installation, refer to the [usage][3].
 
