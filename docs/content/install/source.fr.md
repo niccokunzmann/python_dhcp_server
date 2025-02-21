@@ -47,7 +47,7 @@ pip install git+https://github.com/niccokunzmann/simple_dhcp_server.git
 
 You can also [setup the Simple DHCP Server for development][4].
 
-## Usage
+## Utilisation
 
 After installation, refer to the [usage][3].
 

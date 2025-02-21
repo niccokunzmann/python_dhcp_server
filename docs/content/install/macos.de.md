@@ -4,22 +4,23 @@ title: "Mac OS"
 
 ![](/img/macos-install.png)
 
-To install the app, download the release `Simple.DHCP.Server.X.Y.Z.dmg` from the
-[latest release][3]. Open it and move the app into the Applications. Once
-installed like this, you can run the app.
+Um die App zu installieren, lade die Datei `Simple.DHCP.Server.X.Y.Z.dmg` der
+[neusten Version][3] herunter. Öffne die Datei und schiebe die App in die
+Applikationen. Nachdem die App so installiert wurde kannst Du sie ausführen.
 
-## Configuration and Cache
+## Einstellungen und Cache
 
 ![](/img/macos-files.png)
 
-Your configuration files are stored in `~/Library/Caches/eu.quelltext.dhcp/`.
+Die Konfigurationsdateien befinden sich in
+`~/Library/Caches/eu.quelltext.dhcp/`.
 
-Read more about [configuration and usage][2].
+Lies mehr über [Einstellungen und Benutzung][2].
 
-## Python Package Installation
+## Installation des Python-Paketes
 
-The alternative way is to install the Python package. You should first setup
-Python 3 using [brew].
+Eine andere Möglichkeit ist, das Python-Paket zu installieren. Du solltest
+zuerst Python 3 mit [brew] installieren.
 
 ```sh
 brew install python-tk
